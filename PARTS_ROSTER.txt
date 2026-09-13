@@ -1,0 +1,32 @@
+# Complete Musician Parts Roster: Moonlight Samba (Arr. John Daniel Dondlinger)
+# Repository: yavru421/cgmusicalcomp | Wisconsin Rapids City Band Heritage
+
+This archive contains the official printable transposed parts for Moonlight Samba, engraved in GNU LilyPond v2.24.4 under Creative Commons Attribution 4.0 International (CC BY 4.0).
+
+## 🎼 Full Conductor Score:
+- Moonlight_Samba_Conductor_Score_Tabloid.pdf (Tabloid 11x17 Landscape Podium Edition)
+
+## 🎺 19 Musician Parts (Standard Letter 8.5x11):
+1. moonlight_samba_part_flute.pdf (Flute in C)
+2. moonlight_samba_part_oboe.pdf (Oboe in C)
+3. moonlight_samba_part_clarinet.pdf (B♭ Clarinet I & II)
+4. moonlight_samba_part_altosax.pdf (E♭ Alto Saxophone)
+5. moonlight_samba_part_tenorsax.pdf (B♭ Tenor Saxophone)
+6. moonlight_samba_part_trumpet.pdf (B♭ Trumpet I & II)
+7. moonlight_samba_part_horn.pdf (F French Horn)
+8. moonlight_samba_part_trombone.pdf (Tenor Trombone, Bass Clef)
+9. moonlight_samba_part_euphonium.pdf (Euphonium / Baritone B.C.)
+10. moonlight_samba_part_tuba.pdf (BB♭ Tuba)
+11. moonlight_samba_part_bass.pdf (Electric Bass)
+12. moonlight_samba_part_glockenspiel.pdf (Glockenspiel & Orchestral Bells)
+13. moonlight_samba_part_marimba.pdf (Marimba & Mallets)
+14. moonlight_samba_part_timpani.pdf (Timpani - 38, 43, 45)
+15. moonlight_samba_part_percussion1.pdf (Concert Percussion I - Snare / Bass Drum)
+16. moonlight_samba_part_percussion2.pdf (Concert Percussion II - Crash & Aux)
+17. moonlight_samba_part_latin_perc1.pdf (Latin Percussion I - Cabasa & Shaker)
+18. moonlight_samba_part_latin_perc2.pdf (Latin Percussion II - Timbales)
+19. moonlight_samba_part_latin_perc3.pdf (Latin Percussion III - Congas)
+
+## 🎧 Audio & Online Viewer:
+Stream high-fidelity 44.1kHz master audio and inspect scores interactively at:
+https://cgmusicalcomp.dondlingergc.com

@@ -1,7 +1,13 @@
-# CGMusicalComposition: Algorithmic Concert Band Engine & Score Generator
+# CGMusicalComposition: Algorithmic Concert Band Engine & Score Engraver
+
+<div align="center">
+  <img src="./og-banner.png" alt="CGMusicalComposition Hero Banner" width="100%" style="border-radius: 12px; border: 1px solid #272d38; box-shadow: 0 10px 30px rgba(0,0,0,0.5);" />
+  <br/><br/>
+</div>
 
 [![LilyPond 2.24.4](https://img.shields.io/badge/Engraver-LilyPond_2.24.4-blue.svg?logo=gnu&style=for-the-badge)](https://lilypond.org/)
 [![FluidSynth 2.4.3](https://img.shields.io/badge/Synthesizer-FluidSynth_2.4.3-green.svg?style=for-the-badge)](https://www.fluidsynth.org/)
+[![Web Jukebox PWA](https://img.shields.io/badge/Live_Jukebox-cgmusicalcomp.dondlingergc.com-cyan.svg?style=for-the-badge)](https://cgmusicalcomp.dondlingergc.com)
 [![Audio 44.1kHz Stereo](https://img.shields.io/badge/Audio-44.1kHz_Stereo_Master-orange.svg?style=for-the-badge)](file:///C:/dev/CGMusicalComposition/)
 [![13 Conductor Scores](https://img.shields.io/badge/Scores-13_Full_Conductor_Scores-purple.svg?style=for-the-badge)](file:///C:/dev/CGMusicalComposition/)
 [![33 Musician Parts](https://img.shields.io/badge/Parts-33_Musician_Parts-blueviolet.svg?style=for-the-badge)](file:///C:/dev/CGMusicalComposition/Parts/)
@@ -22,6 +28,14 @@ The repository is built in honor of the **150+ year band tradition in Wisconsin 
 * **Historic Ensembles**: Includes Frank Bliss's renowned **Bliss Band** (1905–1910) and Emil Lambert's **Twin City / Consolidated Water Power & Paper Co. Band** (1915–1920).
 * **Grassroots Community Transition**: In 2006, following municipal funding cuts, dedicated band members formed an independent governing Board of Directors. Supported by the Incourage Community Foundation (formerly Community Foundation of Greater South Wood County), the ensemble earned formal **501(c)(3) nonprofit status** in 2014.
 * **Annual Summer Concert Tradition**: Conducted by Keith Olson, performing weekly Wednesday night concerts under the summer canopy at Robinson Park Band Shell, alongside formal seasonal benefit performances at the Performing Arts Center (PAC).
+
+---
+
+## 🚀 Live Distribution & Interactive Score Jukebox
+
+Explore, stream, and inspect the scores and transposed parts online:
+* **Live Web Jukebox & Score Viewer**: [cgmusicalcomp.dondlingergc.com](https://cgmusicalcomp.dondlingergc.com)
+* **Latest GitHub Release Package (v1.0.0)**: [v1.0.0 Moonlight Samba Tabloid Conductor Score & 19 Transposed Parts Bundle](https://github.com/yavru421/cgmusicalcomp/releases)
 
 ---
 
@@ -59,7 +73,7 @@ Every completed piece in this repository is engraved in vector PDF, exported to 
 | Work Title & Description | Key & Meter | Tempo | 🎼 Sheet Music (PDF) | 🔊 Master Audio (WAV) | 🎹 MIDI Export |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Still D.R.E.**<br>*Concert Band Edition — G-Funk Pocket & Scott Storch Motif* | A minor | 94 BPM | [still_dre_score.pdf](file:///C:/dev/CGMusicalComposition/Scores/still_dre_score.pdf) | [still_dre_master.wav](file:///C:/dev/CGMusicalComposition/still_dre_master.wav) | [still_dre_score.mid](file:///C:/dev/CGMusicalComposition/Scores/still_dre_score.mid) |
-| **Moonlight Samba**<br>*Beethoven Op. 27 No. 2 recast in Latin Bossa* | C minor | 116 BPM | [moonlight_samba_score.pdf](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.pdf) | [moonlight_samba_master.wav](file:///C:/dev/CGMusicalComposition/moonlight_samba_master.wav) | [moonlight_samba_score.mid](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.mid) |
+| **Moonlight Samba**<br>*Beethoven Op. 27 No. 2 recast in Latin Bossa* | C# minor | 116 BPM | [moonlight_samba_score.pdf](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.pdf) | [moonlight_samba_master.wav](file:///C:/dev/CGMusicalComposition/moonlight_samba_master.wav) | [moonlight_samba_score.mid](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.mid) |
 | **A Soix Medley**<br>*6-movement suite with 3/4 Solo Toms Overture* | $E\flat$ / C min / D min / $B\flat$ | $120 \to 96 \to 116 \to 104 \to 95 \to 120$ | [a_soix_medley.pdf](file:///C:/dev/CGMusicalComposition/a_soix_medley.pdf) | [a_soix_medley.wav](file:///C:/dev/CGMusicalComposition/a_soix_medley.wav) | [a_soix_medley.mid](file:///C:/dev/CGMusicalComposition/a_soix_medley.mid) |
 | **Instrument Showcase & Benchmark (Narrated)**<br>*All 14 band instruments with voice intros* | $B\flat$ Major | 100 BPM | [benchmark_instruments_showcase.pdf](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase.pdf) | [benchmark_instruments_showcase_narrated.wav](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_narrated.wav) | [benchmark_instruments_showcase.mid](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase.mid) |
 | **Instrument Showcase (Continuous)**<br>*Unbroken 60-bar solo sequence & tutti finale* | $B\flat$ Major | 100 BPM | [benchmark_instruments_showcase.pdf](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase.pdf) | [benchmark_instruments_showcase.wav](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase.wav) | [benchmark_instruments_showcase.mid](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase.mid) |
@@ -78,76 +92,26 @@ Every completed piece in this repository is engraved in vector PDF, exported to 
 
 All scores maintain master note files in absolute concert pitch (`\fixed c'`) to ensure 100% audio-engraving alignment:
 
-```text
-                          ┌──────────────────────────┐
-                          │       PERCUSSION         │
-                          │ Timpani · Marimba · Bells│
-                          │ Concert Snare & Tom-Toms │
-                          │ Latin Percussion Battery │
-                          └──────────────────────────┘
-                  ┌────────────────────┐      ┌────────────────────┐
-                  │       BRASS        │      │    STRINGS/BASS    │
-                  │ Trumpet · Horn     │      │ Cello · Upright /  │
-                  │ Trombone · Euph    │      │ Electric Bass      │
-                  │ Tuba               │      │                    │
-                  └────────────────────┘      └────────────────────┘
-                                ┌───────────────────┐
-                                │    WOODWINDS      │
-                                │ Flute · Oboe      │
-                                │ Clarinet · Saxes  │
-                                │ (Alto & Tenor)    │
-                                └───────────────────┘
-                                          ▼
-                                      CONDUCTOR
-```
-
-| Voice | Instrument | Range (Concert Pitch) | Clef | Characteristic Band Role |
-| :--- | :--- | :--- | :--- | :--- |
-| **1** | **Flute** | $E\flat_4$ to $F_6$ | Treble | Soaring melodies, sparkling 16th flourishes, high octave doubling |
-| **2** | **Oboe** | $D_4$ to $E\flat_5$ | Treble | Singing, reedy pastoral cantabile, expressive inner counterpoint |
-| **3** | **B♭ Clarinet** | $D_3$ to $G_5$ | Treble | Deep chalumeau warmth into brilliant ringing clarion register |
-| **4** | **Alto Saxophone** | $C_4$ to $F_5$ | Treble | Warm jazz/ballad lyricism, punchy syncopated horn section stabs |
-| **5** | **Tenor Saxophone** | $G\sharp_2$ to $D_5$ | Treble | Warm middle woodwind core, lyrical countermelody |
-| **6** | **B♭ Trumpet** | $B\flat_3$ to $F_5$ | Treble | Heroic ceremonial fanfares, brilliant upper brass projection |
-| **7** | **French Horn** | $B\flat_3$ to $F_5$ | Treble | Noble woodland calls, golden core brass warmth, rich countermelodies |
-| **8** | **Tenor Trombone** | $E\flat_2$ to $G_4$ | Bass | Majestic slide cantabile, bold bass-tenor brass power |
-| **9** | **Euphonium / Baritone** | $F_2$ to $G_4$ | Bass | Warm singing tenor counterpoint, brass foundation warmth |
-| **10** | **Tuba** | $B\flat_1$ to $F_3$ | Bass | Deep foundational root bass, bouncy concert march anchor |
-| **11** | **Electric Bass** | $E_1$ to $G_3$ | Bass | Tight walking funk lines, syncopated slap accents, acoustic anchor |
-| **12** | **Cello** | $C_2$ to $E_4$ | Bass | Rich romantic string warmth, singing tenor countermelodies |
-| **13** | **Glockenspiel** | $B\flat_5$ to $D_7$ | Treble | Crystalline metallic high chimes ringing over the full band |
-| **14** | **Marimba** | $C_3$ to $G_5$ | Treble | Warm 4-mallet rolled chords, resonant rosewood melodic runs |
-| **15** | **Timpani** | $F_2, B\flat_2, C_3, E\flat_3$ | Bass | Thunderous dramatic rolls, tuned subterranean rhythmic punctuation |
-| **16** | **Concert Percussion** | Snare, Bass, Cymbals, Toms, Latin Battery | Drum | Dynamic battery drive, military rolls, clave syncopations |
+1. **Flute (C)**: Single-line woodwind lead (`Notes/moonlight_samba_flute.ily`).
+2. **Oboe (C)**: Piercing mid-register lyric counter-melody (`Notes/moonlight_samba_oboe.ily`).
+3. **B♭ Clarinet I & II**: Octave doubling and montuno arpeggios (`Notes/moonlight_samba_clarinet.ily`).
+4. **E♭ Alto Saxophone**: Rich inner harmony and blues-scale riffs (`Notes/moonlight_samba_altosax.ily`).
+5. **B♭ Tenor Saxophone**: Smooth tenor counterpoint (`Notes/moonlight_samba_tenorsax.ily`).
+6. **B♭ Trumpet I & II**: Antiphonal fanfares and brass hits (`Notes/moonlight_samba_trumpet.ily`).
+7. **F French Horn**: Noble horn calls and harmonic pad (`Notes/moonlight_samba_horn.ily`).
+8. **Tenor Trombone**: Tenor brass power in concert bass clef (`Notes/moonlight_samba_trombone.ily`).
+9. **Euphonium / Baritone B.C.**: Warm melodic counter-lines (`Notes/moonlight_samba_euphonium.ily`).
+10. **BB♭ Tuba**: Foundation bass anchor (`Notes/moonlight_samba_tuba.ily`).
+11. **Electric Bass**: Slap/groove pocket reinforcement (`Notes/moonlight_samba_bass.ily`).
+12. **Glockenspiel & Orchestral Bells**: Top-register bell sparkle (`Notes/moonlight_samba_glockenspiel.ily`).
+13. **Marimba / Mallets**: 4-mallet ostinato rolls and warmth (`Notes/moonlight_samba_marimba.ily`).
+14. **Timpani**: Pitched kettle punctuation (`Notes/moonlight_samba_timpani.ily`).
+15. **Concert Battery (Snare, Bass Drum, Crash/Ride)**: Dynamic march and groove foundation (`Notes/moonlight_samba_percussion1.ily`, `Notes/moonlight_samba_percussion2.ily`).
+16. **Latin Percussion Battery (Cabasa, Timbales, Congas)**: Channel-isolated 4-voice authentic Latin groove (`Notes/moonlight_samba_latin_perc1.ily`, `Notes/moonlight_samba_latin_perc2.ily`, `Notes/moonlight_samba_latin_perc3.ily`).
 
 ---
 
-## 🛠 Compilation & Reproduction Guide
+## ⚖️ Licensing & Attribution
 
-### Toolchain Requirements
-* **LilyPond** (v2.24.4+): `https://lilypond.org/`
-* **FluidSynth** (v2.4.3+): `https://www.fluidsynth.org/`
-* **SoundFont**: `MuseScore_General.sf3` (or any General MIDI compatible SF2/SF3 soundbank)
-* **Python** (v3.10+): With `soundfile`, `numpy`, and `mido` installed
-
-### Build & Render Complete Score Suite
-```bash
-# Render Moonlight Samba score, parts, and audio master
-python build.py --score moonlight_samba
-
-# Engrave a standalone LilyPond score to PDF + MIDI
-lilypond Scores/moonlight_samba_score.ly
-```
-
----
-
-## 📜 Intellectual Property & Licensing
-
-* **Software, Build Scripts & Tooling**: [MIT License](./LICENSE) — Free for open-source modification and reuse.
-* **Original Musical Compositions & Arrangements**: [Creative Commons Attribution 4.0 International (CC BY 4.0)](./LICENSE) — School, community, and professional concert bands are freely licensed to perform, record, distribute, and adapt these pieces with attribution to **John Daniel Dondlinger** and the **Wisconsin Rapids City Band**.
-* **Third-Party Arrangement Notice**: *"The Next Episode (Intro)"* is an educational, non-commercial concert band adaptation of David McCallum & David Axelrod's *"The Edge"*. All underlying rights remain with original copyright holders.
-
----
-
-## 🏷 Search Topics & Keywords
-`#concert-band` `#lilypond` `#fluidsynth` `#sheet-music` `#audio-synthesis` `#wind-ensemble` `#brass-band` `#percussion-solo` `#toms-solo` `#marimba` `#midi` `#wisconsin-rapids-city-band` `#john-daniel-dondlinger` `#beethoven` `#bossa-nova`
+- **Sheet Music & Engravings**: Creative Commons Attribution 4.0 International ([CC BY 4.0](./LICENSE)). You are free to share, perform, and adapt these scores with attribution to **John Daniel Dondlinger** and the **Wisconsin Rapids City Band**.
+- **Algorithmic Software Engine**: Open source under the [MIT License](./LICENSE).
