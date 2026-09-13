@@ -3,8 +3,8 @@
 [![LilyPond 2.24.4](https://img.shields.io/badge/Engraver-LilyPond_2.24.4-blue.svg?logo=gnu&style=for-the-badge)](https://lilypond.org/)
 [![FluidSynth 2.4.3](https://img.shields.io/badge/Synthesizer-FluidSynth_2.4.3-green.svg?style=for-the-badge)](https://www.fluidsynth.org/)
 [![Audio 44.1kHz Stereo](https://img.shields.io/badge/Audio-44.1kHz_Stereo_Master-orange.svg?style=for-the-badge)](file:///C:/dev/CGMusicalComposition/)
-[![12 Conductor Scores](https://img.shields.io/badge/Scores-12_Full_Conductor_Scores-purple.svg?style=for-the-badge)](file:///C:/dev/CGMusicalComposition/)
-[![19 Musician Parts](https://img.shields.io/badge/Parts-19_Musician_Parts-blueviolet.svg?style=for-the-badge)](file:///C:/dev/CGMusicalComposition/Parts/)
+[![13 Conductor Scores](https://img.shields.io/badge/Scores-13_Full_Conductor_Scores-purple.svg?style=for-the-badge)](file:///C:/dev/CGMusicalComposition/)
+[![33 Musician Parts](https://img.shields.io/badge/Parts-33_Musician_Parts-blueviolet.svg?style=for-the-badge)](file:///C:/dev/CGMusicalComposition/Parts/)
 [![License: MIT & CC BY 4.0](https://img.shields.io/badge/License-MIT_%26_CC_BY_4.0-red.svg?style=for-the-badge)](./LICENSE)
 [![City Band](https://img.shields.io/badge/Ensemble-Wisconsin_Rapids_City_Band-gold.svg?style=for-the-badge)](https://www.wirapids.org/)
 
@@ -32,8 +32,8 @@ What happens when Beethoven’s iconic *Moonlight Sonata* meets an authentic Afr
 
 ## 🎯 Repository Highlights
 
-* **12 Full Conductor Scores & Masters**: Complete engraving sources (`.ly`), conductor scores (`.pdf`), multi-track sequences (`.mid`), and stereo masters (`.wav`).
-* **19 Individual Musician Parts**: Automatic extraction with `\compressMMRests`, rehearsal cues, and page turns for full concert band rehearsal.
+* **13 Full Conductor Scores & Masters**: Complete engraving sources (`.ly`), conductor scores (`.pdf`), multi-track sequences (`.mid`), and stereo masters (`.wav`).
+* **33 Individual Musician Parts**: Automatic extraction with `\compressMMRests`, rehearsal cues, and page turns for full concert band rehearsal.
 * **The 14-Voice Concert Band Core**: Strict absolute concert pitch architecture (`\fixed c'`) with zero relative-mode octave runaway.
 * **Solo Toms 3/4 Overture**: The centerpiece *A Soix Medley* begins with a 12-measure unaccompanied concert tom-toms solo in $\frac{3}{4}$ meter.
 * **14-Instrument Benchmark Suite**: Features every acoustic instrument playing an individual solo medley, complete with Kokoro ONNX neural voice narration (`benchmark_instruments_showcase_narrated.wav`).
@@ -47,6 +47,7 @@ Every completed piece in this repository is engraved in vector PDF, exported to 
 
 | Work Title & Description | Key & Meter | Tempo | 🎼 Sheet Music (PDF) | 🔊 Master Audio (WAV) | 🎹 MIDI Export |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Still D.R.E.**<br>*Concert Band Edition — G-Funk Pocket & Scott Storch Motif* | A minor | 94 BPM | [still_dre_score.pdf](file:///C:/dev/CGMusicalComposition/Scores/still_dre_score.pdf) | [still_dre_master.wav](file:///C:/dev/CGMusicalComposition/still_dre_master.wav) | [still_dre_score.mid](file:///C:/dev/CGMusicalComposition/Scores/still_dre_score.mid) |
 | **Moonlight Samba**<br>*Beethoven Op. 27 No. 2 recast in Latin Bossa* | C minor | 116 BPM | [moonlight_samba_score.pdf](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.pdf) | [moonlight_samba_master.wav](file:///C:/dev/CGMusicalComposition/moonlight_samba_master.wav) | [moonlight_samba_score.mid](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.mid) |
 | **A Soix Medley**<br>*6-movement suite with 3/4 Solo Toms Overture* | $E\flat$ / C min / D min / $B\flat$ | $120 \to 96 \to 116 \to 104 \to 95 \to 120$ | [a_soix_medley.pdf](file:///C:/dev/CGMusicalComposition/a_soix_medley.pdf) | [a_soix_medley.wav](file:///C:/dev/CGMusicalComposition/a_soix_medley.wav) | [a_soix_medley.mid](file:///C:/dev/CGMusicalComposition/a_soix_medley.mid) |
 | **Instrument Showcase & Benchmark (Narrated)**<br>*All 14 band instruments with voice intros* | $B\flat$ Major | 100 BPM | [benchmark_instruments_showcase.pdf](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase.pdf) | [benchmark_instruments_showcase_narrated.wav](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_narrated.wav) | [benchmark_instruments_showcase.mid](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase.mid) |
