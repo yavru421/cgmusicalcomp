@@ -28,8 +28,10 @@ SOUNDFONT = os.environ.get("CG_SOUNDFONT", r"C:\dev\tools\soundfonts\MuseScore_G
 HUMANIZE_PY = os.path.join(WORKDIR, "humanize.py")
 VALIDATE_PY = os.path.join(WORKDIR, "validate_playability.py")
 
-# Concert Band Seating Panning Sequence (Flute, Oboe, Clarinet, Sax, Trumpet, Horn, Trombone, Bass, Drums, Timp)
-DEFAULT_SEATING_PAN = [38, 52, 30, 80, 92, 48, 84, 64, 64, 72]
+# Concert Band Seating Panning Sequence (14 tracks):
+# Flute(38), Oboe(46), Clarinet(30), AltoSax(50), Trumpet(90), Horn(42), Trombone(84), Tuba(76),
+# Bass(64), Glock(34), Marimba(60), Perc1(64), Perc2(78), Perc3(56), Timp(70)
+DEFAULT_SEATING_PAN = [38, 46, 30, 50, 90, 42, 84, 76, 64, 34, 60, 64, 78, 56, 70]
 
 def check_dependencies():
     missing = []

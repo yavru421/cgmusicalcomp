@@ -2,32 +2,36 @@
 
 % ============================================================================
 % Moonlight Samba — 10. TIMPANI (Concert Pitch, Absolute \fixed c')
-% Standard Concert Band Pedal Kettles Tuned to C# and G# Roots & Fifths
+% 56 Measures Total: Pedal Kettles Tuned to C# and G# Roots & Fifths
 % Grounded in Active DuckDB Correction (Authentic C# minor, Bass Clef)
+% 5 Stops / Sectional Medley Support / Percussion Soli Breakout
 % ============================================================================
 
 timpaniNotes = \fixed c' {
   \clef bass
 
-  % Intro (mm. 1-8)
+  % Part I: Percussion Start & Groove Build (mm. 1-8) -> STOP 1 at m. 8
+  % Enters m. 5 after Snare/BD intro to build groove toward first stop
   R1 * 4 |
   cis4.\f cis8 ~ cis4 cis |
   gis,4. gis,8 ~ gis,4 gis, |
   cis4. cis8 ~ cis4 cis |
-  gis,2\f\> cis4\p r |
+  gis,2\f\> cis4:32\p\fermata r |
 
-  % Section A: First Theme Drive (mm. 9-16)
-  cis4.\f cis8 ~ cis4 cis |
+  % Part II: Section A — Muted Trumpet & Marimba Medley (mm. 9-16) -> STOP 2 at m. 16
+  % Gentle acoustic heartbeat pulse under Muted Trumpet
+  cis4.\p cis8 ~ cis4 cis |
   cis4. cis8 ~ cis4 cis |
   cis4. cis8 ~ cis4 cis |
   gis,4. gis,8 ~ gis,4 gis, |
-  cis4.\f cis8 ~ cis4 cis |
+  cis4.\p cis8 ~ cis4 cis |
   cis4. cis8 ~ cis4 cis |
   cis4. cis8 ~ cis4 cis |
-  gis,1\f |
+  gis,2\f cis4:32\ff\fermata r |
 
-  % Section B: Latin Pushes (mm. 17-24)
-  cis4\ff r cis r |
+  % Part III: Section B — Woodwinds & Saxophone Medley (mm. 17-24) -> STOP 3 at m. 24
+  % Light syncopated support for Woodwind ensemble
+  cis4\mf r cis r |
   cis4 r cis r |
   gis,4 r gis, r |
   cis2. r4 |
@@ -36,10 +40,30 @@ timpaniNotes = \fixed c' {
   gis,4. gis,8 ~ gis,4 gis, |
   cis2:32\ff cis4:32\fermata r |
 
-  % Section C: Middle Break (Tacet mm. 25-32)
-  R1 * 8 |
+  % Part IV: Section C — Low Brass Montuno Drive (mm. 25-32) -> STOP 4 at m. 32
+  % Heavy root-fifth Latin ostinato driving Trombone & Tuba
+  cis4.\ff cis8 ~ cis4 cis |
+  gis,4. gis,8 ~ gis,4 gis, |
+  cis4. cis8 ~ cis4 cis |
+  gis,4. gis,8 ~ gis,4 gis, |
+  cis4.\ff cis8 ~ cis4 cis |
+  cis4. cis8 ~ cis4 cis |
+  gis,4. gis,8 ~ gis,4 gis, |
+  cis2:32\ff cis4:32\fermata r |
 
-  % Section D: Reprise & Thunderous Drive (mm. 33-44)
+  % Part V: Section D — Intimate Adagio Bossa Break (mm. 33-40) -> STOP 5 at m. 40
+  % Tacet for intimate chamber Bossa woodwind texture
+  R1 * 7 |
+  r2. r4\fermata |
+
+  % Part VI: Section E — Latin Percussion Soli Breakout (mm. 41-44)
+  % Syncopated low-C# and G# punches with Snare rimclicks & Clave
+  r4. cis8\f ~ cis4 cis8 cis |
+  gis,4. gis,8 ~ gis,4 gis,8 gis, |
+  r4. cis8 ~ cis4 cis8 cis |
+  gis,4 cis:32\ff r2 |
+
+  % Part VII: Section F — Building Back to Grand Tutti Climax (mm. 45-56)
   r2.. gis,8\ff |
   cis4.\ff cis8 cis4. cis8 |
   cis4. cis8 cis2 |
