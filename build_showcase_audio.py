@@ -1,16 +1,58 @@
 import os
+import sys
 import subprocess
+import math
+import shutil
+import mido
 import soundfile as sf
 import numpy as np
+from scipy.signal import resample_poly
 
-WORKDIR = r"C:\dev\CGMusicalComposition"
-PYTHON_EXE = r"C:\Miniforge\python.exe"
-SYNTH_PY = r"C:\dev\speech-mcp-server\synth.py"
-LILYPOND = r"C:\dev\tools\lilypond\lilypond-2.24.4\bin\lilypond.exe"
-FLUIDSYNTH = r"C:\dev\tools\fluidsynth\bin\fluidsynth.exe"
-SOUNDFONT = r"C:\dev\tools\soundfonts\MuseScore_General.sf3"
+WORKDIR = os.environ.get("CG_WORKDIR", r"C:\dev\CGMusicalComposition")
+PYTHON_EXE = os.environ.get("CG_PYTHON", r"C:\Miniforge\python.exe")
+SYNTH_PY = os.environ.get("CG_SYNTH_PY", r"C:\dev\speech-mcp-server\synth.py")
+LILYPOND = os.environ.get("CG_LILYPOND", r"C:\dev\tools\lilypond\lilypond-2.24.4\bin\lilypond.exe")
+FLUIDSYNTH = os.environ.get("CG_FLUIDSYNTH", r"C:\dev\tools\fluidsynth\bin\fluidsynth.exe")
+SOUNDFONT = os.environ.get("CG_SOUNDFONT", r"C:\dev\tools\soundfonts\MuseScore_General.sf3")
 SCRATCH_DIR = os.path.join(WORKDIR, "scratch_showcase")
 os.makedirs(SCRATCH_DIR, exist_ok=True)
+
+# ============================================================================
+# Standard Concert Band Acoustic Seating Layout: MIDI CC 10 (Pan: 0-127, 64=Center)
+# ============================================================================
+CONCERT_BAND_PAN = {
+    "flute": 38,                     # Left-Center (Front Row Woodwinds)
+    "oboe": 52,                      # Center-Left (Inner Woodwinds)
+    "clarinet": 30,                  # Front-Left (Clarinet Section Core)
+    "alto sax": 80,                  # Center-Right (Saxophone Row)
+    "trumpet": 92,                   # Back-Right (Upper Brass)
+    "french horn": 48,               # Center-Left Back (Middle Brass)
+    "trombone": 84,                  # Center-Right (Low Brass Slide Section)
+    "tuba": 64,                      # Center-Back (Bass Anchor)
+    "electric bass (finger)": 58,    # Center-Left (Rhythm Foundation)
+    "cello": 82,                     # Right-Center (Strings Tenor)
+    "glockenspiel": 22,              # Far-Left Back (Metallic Percussion)
+    "marimba": 42,                   # Left-Center (Keyboard Percussion)
+    "timpani": 72,                   # Center-Right Back (Kettle Drums)
+    "standard kit": 64,              # Center-Back (Battery Percussion)
+}
+
+TUTTI_PAN_SEQUENCE = [
+    38,  # 1. Flute
+    52,  # 2. Oboe
+    30,  # 3. Clarinet
+    80,  # 4. Alto Sax
+    92,  # 5. Trumpet
+    48,  # 6. French Horn
+    84,  # 7. Trombone
+    64,  # 8. Tuba
+    58,  # 9. Electric Bass
+    82,  # 10. Cello
+    22,  # 11. Glockenspiel
+    42,  # 12. Marimba
+    72,  # 13. Timpani
+    64,  # 14. Percussion Battery
+]
 
 INSTRUMENTS = [
     (
@@ -207,16 +249,66 @@ INSTRUMENTS = [
     )
 ]
 
+def apply_midi_pan_to_file(mid_path: str, pan_val: int) -> None:
+    """Injects CC 10 (Pan) into all non-drum tracks of a single-instrument MIDI file."""
+    try:
+        mid = mido.MidiFile(mid_path)
+        for track in mid.tracks:
+            # Find the channel used
+            ch = 0
+            for msg in track:
+                if hasattr(msg, "channel"):
+                    ch = msg.channel
+                    break
+            track.insert(0, mido.Message('control_change', channel=ch, control=10, value=pan_val, time=0))
+        mid.save(mid_path)
+    except Exception as e:
+        print(f"[WARN] Failed to apply CC 10 pan to {mid_path}: {e}", file=sys.stderr)
+
+def apply_tutti_midi_panning(mid_path: str) -> None:
+    """Injects CC 10 (Pan) into each track of the multi-track Tutti MIDI file based on seating sequence."""
+    try:
+        mid = mido.MidiFile(mid_path)
+        pan_idx = 0
+        for track in mid.tracks:
+            # Check if this track contains note events
+            has_notes = any(msg.type == 'note_on' for msg in track)
+            if has_notes:
+                pan_val = TUTTI_PAN_SEQUENCE[pan_idx] if pan_idx < len(TUTTI_PAN_SEQUENCE) else 64
+                ch = 0
+                for msg in track:
+                    if hasattr(msg, "channel"):
+                        ch = msg.channel
+                        break
+                track.insert(0, mido.Message('control_change', channel=ch, control=10, value=pan_val, time=0))
+                pan_idx += 1
+        mid.save(mid_path)
+        print(f"[PAN] Applied concert band stereo spatialization (CC 10) across {pan_idx} tracks.")
+    except Exception as e:
+        print(f"[WARN] Failed to apply tutti CC 10 pan: {e}", file=sys.stderr)
+
+def high_quality_resample(audio_data: np.ndarray, orig_sr: int, target_sr: int) -> np.ndarray:
+    """Polyphase sinc filtering for anti-aliased sample rate conversion."""
+    if orig_sr == target_sr:
+        return audio_data
+    gcd = math.gcd(orig_sr, target_sr)
+    up = target_sr // gcd
+    down = orig_sr // gcd
+    return resample_poly(audio_data, up, down, axis=0).astype(np.float32)
+
 def synthesize_voice(text, out_wav):
     cmd = [PYTHON_EXE, SYNTH_PY, text, "gideon", "1.05"]
-    res = subprocess.run(cmd, capture_output=True, text=True, cwd=WORKDIR)
-    for line in res.stdout.splitlines():
-        if line.startswith("SYNTH_WAV:"):
-            gen_file = line.replace("SYNTH_WAV:", "").strip()
-            if os.path.exists(gen_file):
-                data, sr = sf.read(gen_file)
-                sf.write(out_wav, data, sr)
-                return True
+    try:
+        res = subprocess.run(cmd, capture_output=True, text=True, cwd=WORKDIR, timeout=60)
+        for line in res.stdout.splitlines():
+            if line.startswith("SYNTH_WAV:"):
+                gen_file = line.replace("SYNTH_WAV:", "").strip()
+                if os.path.exists(gen_file):
+                    data, sr = sf.read(gen_file)
+                    sf.write(out_wav, data, sr)
+                    return True
+    except Exception as e:
+        print(f"[WARN] Voice synthesis exception: {e}", file=sys.stderr)
     return False
 
 def render_instrument_solo(tag, midi_inst, clef, notes, is_drum, out_wav):
@@ -238,9 +330,13 @@ def render_instrument_solo(tag, midi_inst, clef, notes, is_drum, out_wav):
     with open(ly_file, "w", encoding="utf-8") as f:
         f.write(ly_content)
         
-    subprocess.run([LILYPOND, ly_file], capture_output=True, text=True, cwd=SCRATCH_DIR)
+    subprocess.run([LILYPOND, ly_file], capture_output=True, text=True, cwd=SCRATCH_DIR, timeout=60)
     if not os.path.exists(mid_file):
         return False
+
+    # Apply CC 10 Panning based on Concert Band seating position
+    pan_val = CONCERT_BAND_PAN.get(midi_inst, 64)
+    apply_midi_pan_to_file(mid_file, pan_val)
         
     cmd = [
         FLUIDSYNTH,
@@ -254,7 +350,7 @@ def render_instrument_solo(tag, midi_inst, clef, notes, is_drum, out_wav):
         SOUNDFONT,
         mid_file
     ]
-    subprocess.run(cmd, capture_output=True, text=True, cwd=SCRATCH_DIR)
+    subprocess.run(cmd, capture_output=True, text=True, cwd=SCRATCH_DIR, timeout=120)
     return os.path.exists(out_wav)
 
 def render_tutti_solo(out_wav):
@@ -286,7 +382,11 @@ global = { \key bes \major \time 4/4 \tempo 4 = 100 }
 """
     with open(ly_file, "w", encoding="utf-8") as f:
         f.write(ly_content)
-    subprocess.run([LILYPOND, ly_file], capture_output=True, text=True, cwd=SCRATCH_DIR)
+    subprocess.run([LILYPOND, ly_file], capture_output=True, text=True, cwd=SCRATCH_DIR, timeout=90)
+    
+    # Apply full concert band spatial panning across tutti staves
+    apply_tutti_midi_panning(mid_file)
+
     cmd = [
         FLUIDSYNTH,
         "-F", out_wav,
@@ -299,22 +399,25 @@ global = { \key bes \major \time 4/4 \tempo 4 = 100 }
         SOUNDFONT,
         mid_file
     ]
-    subprocess.run(cmd, capture_output=True, text=True, cwd=SCRATCH_DIR)
+    subprocess.run(cmd, capture_output=True, text=True, cwd=SCRATCH_DIR, timeout=120)
     return os.path.exists(out_wav)
 
 def assemble_narrated_suite():
     target_sr = 44100
     timeline = []
     
-    print("Beginning compilation of Wisconsin Rapids City Band Instrument Benchmark...")
+    print(f"=== Wisconsin Rapids City Band Instrument Benchmark Suite ===")
+    print(f"Configuring concert band spatialization & polyphase resampling...")
+    
     for idx, (tag, spoken_name, midi_inst, clef, notes, is_drum) in enumerate(INSTRUMENTS, 1):
         voice_wav = os.path.join(SCRATCH_DIR, f"voice_{tag}.wav")
         solo_wav = os.path.join(SCRATCH_DIR, f"solo_{tag}.wav")
         
-        print(f"[{idx}/15] Synthesizing speech label: '{spoken_name}'...")
+        print(f"\n[{idx}/15] Synthesizing speech label: '{spoken_name}'...")
         synthesize_voice(spoken_name, voice_wav)
         
-        print(f"[{idx}/15] Rendering instrument solo: {tag} ({midi_inst})...")
+        pan_val = CONCERT_BAND_PAN.get(midi_inst, 64)
+        print(f"[{idx}/15] Rendering instrument solo: {tag} ({midi_inst}, CC10 Pan={pan_val})...")
         if tag == "15_tutti":
             render_tutti_solo(solo_wav)
         else:
@@ -325,16 +428,7 @@ def assemble_narrated_suite():
             if v_data.ndim == 1:
                 v_data = np.column_stack([v_data, v_data])
             if v_sr != target_sr:
-                orig_len = len(v_data)
-                target_len = int(orig_len * (target_sr / v_sr))
-                v_data_resampled = np.zeros((target_len, 2), dtype=np.float32)
-                for ch in range(2):
-                    v_data_resampled[:, ch] = np.interp(
-                        np.linspace(0, orig_len - 1, target_len),
-                        np.arange(orig_len),
-                        v_data[:, ch]
-                    )
-                v_data = v_data_resampled
+                v_data = high_quality_resample(v_data, v_sr, target_sr)
             v_peak = np.max(np.abs(v_data))
             if v_peak > 0:
                 v_data = (v_data / v_peak) * 0.85
@@ -347,16 +441,7 @@ def assemble_narrated_suite():
             if s_data.ndim == 1:
                 s_data = np.column_stack([s_data, s_data])
             if s_sr != target_sr:
-                orig_len = len(s_data)
-                target_len = int(orig_len * (target_sr / s_sr))
-                s_data_resampled = np.zeros((target_len, 2), dtype=np.float32)
-                for ch in range(2):
-                    s_data_resampled[:, ch] = np.interp(
-                        np.linspace(0, orig_len - 1, target_len),
-                        np.arange(orig_len),
-                        s_data[:, ch]
-                    )
-                s_data = s_data_resampled
+                s_data = high_quality_resample(s_data, s_sr, target_sr)
             timeline.append(s_data)
             
         timeline.append(np.zeros((int(target_sr * 0.75), 2), dtype=np.float32))
@@ -370,8 +455,8 @@ def assemble_narrated_suite():
         
     master_out = os.path.join(WORKDIR, "benchmark_instruments_showcase_narrated.wav")
     sf.write(master_out, full_audio, target_sr, subtype="PCM_16")
-    print(f"\nMaster benchmark narrated audio written to: {master_out}")
-    print(f"Total duration: {len(full_audio) / target_sr:.2f} seconds.")
+    print(f"\n[SUCCESS] Master benchmark narrated audio written to: {master_out}")
+    print(f"          Total duration: {len(full_audio) / target_sr:.2f} seconds.")
 
 if __name__ == "__main__":
     assemble_narrated_suite()
