@@ -14,7 +14,7 @@ trumpetNotes = \fixed c' {
   r8 cis'4.\f ~ cis'4 cis'8 cis' |
   r8 dis'4. ~ dis'4 dis'8 dis' |
   r8 e'4. fis'4 gis'8 a' |
-  bis'2\ff r4\fermata |
+  bis'2\ff r2\fermata |
 
   % Part II: Section A — Harmon-Muted Solo Voice (mm. 9-16) -> STOP 2
   gis'4.\mp^\markup { \italic "Harmon Mute (stem out)" } gis'8 ~ gis'4 gis'8 a' |

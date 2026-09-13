@@ -11,7 +11,7 @@ glockenspielNotes = \fixed c' {
   % Part I: Percussion Start (mm. 1-6 tacet) -> Enters m. 7-8 -> STOP 1
   R1 * 6 |
   r2 r8 dis''\f e'' fis'' |
-  bis''2\ff r4\fermata |
+  bis''2\ff r2\fermata |
 
   % Part II: Section A — Muted Trumpet & Marimba (mm. 9-16) - Tacet -> STOP 2
   R1 * 7 |

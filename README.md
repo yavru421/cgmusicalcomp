@@ -1,4 +1,4 @@
-# CGMusicalComp: Algorithmic Concert Band Engine & Score Generator
+# CGMusicalComposition: Algorithmic Concert Band Engine & Score Generator
 
 [![LilyPond 2.24.4](https://img.shields.io/badge/Engraver-LilyPond_2.24.4-blue.svg?logo=gnu&style=for-the-badge)](https://lilypond.org/)
 [![FluidSynth 2.4.3](https://img.shields.io/badge/Synthesizer-FluidSynth_2.4.3-green.svg?style=for-the-badge)](https://www.fluidsynth.org/)
@@ -9,7 +9,29 @@
 [![City Band](https://img.shields.io/badge/Ensemble-Wisconsin_Rapids_City_Band-gold.svg?style=for-the-badge)](https://www.wirapids.org/)
 
 **Composed, Arranged & Orchestrated by John Daniel Dondlinger**  
-*Dedicated to the musicians and community of the Wisconsin Rapids City Band (Wisconsin Rapids, WI)*
+*Dedicated to the musicians, directors, and community of the Wisconsin Rapids City Band (Wisconsin Rapids, WI)*
+
+---
+
+## 🏛️ Wisconsin Rapids City Band Historical Context & Heritage
+
+**CGMusicalComposition** (`cgmusicalcomp`) is an end-to-end algorithmic music composition, sheet music engraving, and acoustic simulation engine. Engineered specifically for a **14-to-16-voice Community Concert Band**, the system automates the transition from symbolic notation to publication-grade conductor scores, transposed instrumental parts, and spatialized stereo audio previews.
+
+The repository is built in honor of the **150+ year band tradition in Wisconsin Rapids**:
+* **1870s Pinery Logging Era**: Public band music in Wisconsin Rapids dates back to the 1870s lumber boom, when civic brass musicians crossed the Wisconsin River between the twin frontier cities of **Centralia** and **Grand Rapids**.
+* **Historic Ensembles**: Includes Frank Bliss's renowned **Bliss Band** (1905–1910) and Emil Lambert's **Twin City / Consolidated Water Power & Paper Co. Band** (1915–1920).
+* **Grassroots Community Transition**: In 2006, following municipal funding cuts, dedicated band members formed an independent governing Board of Directors. Supported by the Incourage Community Foundation (formerly Community Foundation of Greater South Wood County), the ensemble earned formal **501(c)(3) nonprofit status** in 2014.
+* **Annual Summer Concert Tradition**: Conducted by Keith Olson, performing weekly Wednesday night concerts under the summer canopy at Robinson Park Band Shell, alongside formal seasonal benefit performances at the Performing Arts Center (PAC).
+
+---
+
+## 📜 Master Architectural Directives
+
+All AI agents and human contributors must comply with the three core engineering and musical directives governing this repository:
+
+1. **[Human Playability & Ergonomics Directive](./AGENT_PLAYABILITY_DIRECTIVE.md)**: Enforces Grade 3/4 working registers, 16-bar wind breathing limits, embouchure recovery cycles, and timpani kettle tuning constraints.
+2. **[Modular Score Architecture Specification](./SCORE_ARCHITECTURE.md)**: Governs strict single-source note definitions (`Notes/`), `\fixed c'` absolute concert pitch architecture, multi-measure rest compression (`\compressMMRests`), and conductor score layouts.
+3. **[Audio Synthesis & Spatial DSP Directive](./AGENT_AUDIO_DSP_DIRECTIVE.md)**: Specifies concert band seating panning (CC 10), timing micro-jitter humanization ($\pm 6\text{ ms}$), FluidSynth acoustic hall reverberation DSP, and Kokoro ONNX neural speech narration.
 
 ---
 
@@ -27,17 +49,6 @@ What happens when Beethoven’s iconic *Moonlight Sonata* meets an authentic Afr
 2. **Channel-Isolated Latin Percussion**: Latin percussion battery is mapped across independent MIDI channels (`ch 9, 10, 11, 12`) to eliminate General MIDI voice-stealing and drum clipping.
 3. **Calibrated Acoustic Spatialization**: FluidSynth concert hall reverberation (`room-size=0.45`, `damp=0.60`, `level=0.25`, `gain=0.45`) with spatial band seating pan curves (CC 10).
 4. **Gaussian Humanization**: Note timing micro-jitter ($\pm 6\text{ ms}$) and metric dynamic curves remove robotic MIDI stiffness across 2,495 notes.
-
----
-
-## 🎯 Repository Highlights
-
-* **13 Full Conductor Scores & Masters**: Complete engraving sources (`.ly`), conductor scores (`.pdf`), multi-track sequences (`.mid`), and stereo masters (`.wav`).
-* **33 Individual Musician Parts**: Automatic extraction with `\compressMMRests`, rehearsal cues, and page turns for full concert band rehearsal.
-* **The 14-Voice Concert Band Core**: Strict absolute concert pitch architecture (`\fixed c'`) with zero relative-mode octave runaway.
-* **Solo Toms 3/4 Overture**: The centerpiece *A Soix Medley* begins with a 12-measure unaccompanied concert tom-toms solo in $\frac{3}{4}$ meter.
-* **14-Instrument Benchmark Suite**: Features every acoustic instrument playing an individual solo medley, complete with Kokoro ONNX neural voice narration (`benchmark_instruments_showcase_narrated.wav`).
-* **Production-Grade Licensing**: Dual MIT (software & tooling) and Creative Commons Attribution 4.0 (musical scores & audio).
 
 ---
 
@@ -63,35 +74,9 @@ Every completed piece in this repository is engraved in vector PDF, exported to 
 
 ---
 
-## 🥁 Highlight: *A Soix Medley* & The 3/4 Solo Toms Overture
+## 🎺 Concert Band Instrumentation Matrix (The 14-to-16 Voices)
 
-The premier composition, **A Soix Medley** (`a_soix_medley.ly`), solves the challenge of uniting diverse musical idioms into an organic concert suite:
-
-```text
-[ mm. 1-4 ] Solo Concert Tom-Toms (unaccompanied in 3/4, syncopated 16ths, flams, accents)
-    │
-[ mm. 5-8 ] Floor Tom & Polyrhythmic Drive + Subterranean Timpani Pedal Accents
-    │
-[ mm. 9-12] Sharp Full-Ensemble Brass & Woodwind Stabs over Driving Toms Groove -> Fermata Pause
-    │
-[ mm. 13-20] Theme I: Sovereign Light (4/4 E♭ Major, 96 BPM, Marimba Rolled Chords & Flute/Oboe)
-    │
-[ mm. 21-28] Theme II: Moonlight Samba (4/4 C minor, 116 BPM, Latin Bossa Triplet Counterpoint)
-    │
-[ mm. 29-36] Theme III: The Buccaneer's Reel (6/8 D minor, 112 BPM, Swashbuckling Sea Shanty)
-    │
-[ mm. 37-44] Theme IV: Groovatude (4/4 B♭ Major, 104 BPM, 70s Funk Brass Pocket & Slap Bass)
-    │
-[ mm. 45-52] Theme V: The Next Episode (4/4 G minor, 95 BPM, David Axelrod Bassline & Woodwind Stabs)
-    │
-[ mm. 53-62] Theme VI: Sovereign Forge Grand Finale (4/4 B♭ Major, 120 BPM, Triumphal Tutti Climax)
-```
-
----
-
-## 🎺 Concert Band Instrumentation Matrix (The 14 Voices)
-
-All scores are written in concert pitch to ensure 100% audio-engraving alignment:
+All scores maintain master note files in absolute concert pitch (`\fixed c'`) to ensure 100% audio-engraving alignment:
 
 ```text
                           ┌──────────────────────────┐
@@ -103,12 +88,14 @@ All scores are written in concert pitch to ensure 100% audio-engraving alignment
                   ┌────────────────────┐      ┌────────────────────┐
                   │       BRASS        │      │    STRINGS/BASS    │
                   │ Trumpet · Horn     │      │ Cello · Upright /  │
-                  │ Trombone · Tuba    │      │ Electric Bass      │
+                  │ Trombone · Euph    │      │ Electric Bass      │
+                  │ Tuba               │      │                    │
                   └────────────────────┘      └────────────────────┘
                                 ┌───────────────────┐
                                 │    WOODWINDS      │
                                 │ Flute · Oboe      │
-                                │ Clarinet · Sax    │
+                                │ Clarinet · Saxes  │
+                                │ (Alto & Tenor)    │
                                 └───────────────────┘
                                           ▼
                                       CONDUCTOR
@@ -120,57 +107,18 @@ All scores are written in concert pitch to ensure 100% audio-engraving alignment
 | **2** | **Oboe** | $D_4$ to $E\flat_5$ | Treble | Singing, reedy pastoral cantabile, expressive inner counterpoint |
 | **3** | **B♭ Clarinet** | $D_3$ to $G_5$ | Treble | Deep chalumeau warmth into brilliant ringing clarion register |
 | **4** | **Alto Saxophone** | $C_4$ to $F_5$ | Treble | Warm jazz/ballad lyricism, punchy syncopated horn section stabs |
-| **5** | **B♭ Trumpet** | $B\flat_3$ to $F_5$ | Treble | Heroic ceremonial fanfares, brilliant upper brass projection |
-| **6** | **French Horn** | $B\flat_3$ to $F_5$ | Treble | Noble woodland calls, golden core brass warmth, rich countermelodies |
-| **7** | **Tenor Trombone** | $E\flat_2$ to $G_4$ | Bass | Majestic slide cantabile, bold bass-tenor brass power |
-| **8** | **Tuba** | $B\flat_1$ to $F_3$ | Bass | Deep foundational root bass, bouncy concert march anchor |
-| **9** | **Electric Bass** | $E_1$ to $G_3$ | Bass | Tight walking funk lines, syncopated slap accents, acoustic anchor |
-| **10** | **Cello** | $C_2$ to $E_4$ | Bass | Rich romantic string warmth, singing tenor countermelodies |
-| **11** | **Glockenspiel** | $B\flat_5$ to $D_7$ | Treble | Crystalline metallic high chimes ringing over the full band |
-| **12** | **Marimba** | $C_3$ to $G_5$ | Treble | Warm 4-mallet rolled chords, resonant rosewood melodic runs |
-| **13** | **Timpani** | $F_2, B\flat_2, C_3, E\flat_3$ | Bass | Thunderous dramatic rolls, tuned subterranean rhythmic punctuation |
-| **14** | **Concert Percussion** | Snare, Bass, Cymbals, Toms, Latin Battery | Drum | Dynamic battery drive, military rolls, clave syncopations |
-
----
-
-## ⚙️ Architecture & Synthesis Pipeline
-
-### 1. Engraving Guard: Absolute Concert Pitch (`\fixed c'`)
-LilyPond's `\relative` mode presents an insidious trap: when notes are notated with octave ticks (`c''''`), relative mode treats them as compounding intervals against the *previous note*, launching pitches into dog-whistle registers (50+ ledger lines off the page).  
-**The Solution**: Every score in this repository unconditionally enforces **`\fixed c'` (absolute concert pitch)**, eliminating octave drift.
-
-### 2. Acoustic Reverb DSP & Channel Isolation
-Raw MIDI synthesis sounds clinical and robotic. All FluidSynth renders apply calibrated acoustic hall spatialization and separate percussion channels:
-```bash
-fluidsynth.exe -F moonlight_samba_master.wav \
-  -o synth.reverb.active=1 \
-  -o synth.reverb.room-size=0.45 \
-  -o synth.reverb.damp=0.60 \
-  -o synth.reverb.width=0.75 \
-  -o synth.reverb.level=0.25 \
-  -o synth.gain=0.45 \
-  path/to/MuseScore_General.sf3 \
-  moonlight_samba_score_humanized_panned.mid
-```
-
-### 3. Concert Band Seating Panning (`CC 10`)
-The build pipeline injects MIDI Control Change 10 (Pan) values to match standard concert band stage positioning:
-* Flute / Oboe: Pan 40–50 (Left)
-* Clarinet / Saxophone: Pan 45–55 (Center-Left)
-* Horns: Pan 45 (Left-Center)
-* Trumpets / Trombones: Pan 75–85 (Center-Right)
-* Tuba / Bass: Pan 64 (Center Root)
-* Percussion / Mallets: Pan 35–90 (Spread rear acoustic stage)
-
-### 4. Gaussian Humanization
-Micro-timing jitter ($\pm 6\text{ ms}$) and metric dynamic curves are applied across note events via `humanize.py` to recreate the subtle acoustic breath and physical articulation of living musicians.
-
-### 5. Neural Voice Narration Pipeline (`build_showcase_audio.py`)
-To produce the master narrated showcase (`benchmark_instruments_showcase_narrated.wav`), our automated build script:
-1. Compiles each instrument's 4-measure solo with LilyPond.
-2. Renders each solo to uncompressed PCM audio via FluidSynth.
-3. Synthesizes clear neural speech labels using the **Kokoro ONNX** engine with native GPU Mel filterbank acceleration.
-4. Concatenates speech labels and instrument solos with natural reverberant room decay and peak normalizes to $-0.3\text{ dBFS}$.
+| **5** | **Tenor Saxophone** | $G\sharp_2$ to $D_5$ | Treble | Warm middle woodwind core, lyrical countermelody |
+| **6** | **B♭ Trumpet** | $B\flat_3$ to $F_5$ | Treble | Heroic ceremonial fanfares, brilliant upper brass projection |
+| **7** | **French Horn** | $B\flat_3$ to $F_5$ | Treble | Noble woodland calls, golden core brass warmth, rich countermelodies |
+| **8** | **Tenor Trombone** | $E\flat_2$ to $G_4$ | Bass | Majestic slide cantabile, bold bass-tenor brass power |
+| **9** | **Euphonium / Baritone** | $F_2$ to $G_4$ | Bass | Warm singing tenor counterpoint, brass foundation warmth |
+| **10** | **Tuba** | $B\flat_1$ to $F_3$ | Bass | Deep foundational root bass, bouncy concert march anchor |
+| **11** | **Electric Bass** | $E_1$ to $G_3$ | Bass | Tight walking funk lines, syncopated slap accents, acoustic anchor |
+| **12** | **Cello** | $C_2$ to $E_4$ | Bass | Rich romantic string warmth, singing tenor countermelodies |
+| **13** | **Glockenspiel** | $B\flat_5$ to $D_7$ | Treble | Crystalline metallic high chimes ringing over the full band |
+| **14** | **Marimba** | $C_3$ to $G_5$ | Treble | Warm 4-mallet rolled chords, resonant rosewood melodic runs |
+| **15** | **Timpani** | $F_2, B\flat_2, C_3, E\flat_3$ | Bass | Thunderous dramatic rolls, tuned subterranean rhythmic punctuation |
+| **16** | **Concert Percussion** | Snare, Bass, Cymbals, Toms, Latin Battery | Drum | Dynamic battery drive, military rolls, clave syncopations |
 
 ---
 
@@ -189,11 +137,6 @@ python build.py --score moonlight_samba
 
 # Engrave a standalone LilyPond score to PDF + MIDI
 lilypond Scores/moonlight_samba_score.ly
-```
-
-### Recompile the Complete Narrated Showcase Suite
-```bash
-python build_showcase_audio.py
 ```
 
 ---

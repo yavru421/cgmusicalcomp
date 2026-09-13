@@ -14,7 +14,7 @@ tubaNotes = \fixed c' {
   cis,4-.\f r8 gis,, cis,4-. r8 gis,, |
   b,,4-. r8 fis,, b,,4-. r8 fis,, |
   a,,4-. r8 e,, a,,4-. r8 d, |
-  gis,,2\f r4\fermata |
+  gis,,2\f r2\fermata |
 
   % Part II: Section A — Muted Trumpet & Marimba (mm. 9-16) -> STOP 2
   cis,4-.\p r8 gis,, cis,4-. r8 gis,, |

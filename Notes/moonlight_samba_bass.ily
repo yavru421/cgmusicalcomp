@@ -14,7 +14,7 @@ bassNotes = \fixed c' {
   cis4.\f cis8 ~ cis4 cis |
   b,4. b,8 ~ b,4 b, |
   a,4. a,8 ~ a,4 d |
-  gis,2\f r4\fermata |
+  gis,2\f r2\fermata |
 
   % Part II: Section A — Muted Trumpet & Marimba (mm. 9-16) -> STOP 2
   cis4.\p cis8 ~ cis4 cis |

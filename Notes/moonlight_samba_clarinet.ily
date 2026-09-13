@@ -51,7 +51,6 @@ clarinetNotes = \fixed c' {
     gis cis' e' gis cis' e' gis cis' e' gis cis' e' |
     gis cis' e' gis cis' e' gis cis' e' gis cis' e' |
     a cis' e' a cis' e' a d' fis' a d' fis' |
-    gis bis dis' gis cis' e'
   }
   gis2\fermata r2 |
 

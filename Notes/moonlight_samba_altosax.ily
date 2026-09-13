@@ -14,7 +14,7 @@ altoSaxNotes = \fixed c' {
   r8 c'4.\mf ~ c'4 c'8 c' |
   r8 dis'4. ~ dis'4 dis'8 dis' |
   r8 e'4. d'4. c'8 |
-  dis'2\f r4\fermata |
+  dis'2\f r2\fermata |
 
   % Part II: Section A — Muted Trumpet & Marimba (mm. 9-16) -> STOP 2
   R1 * 7 |

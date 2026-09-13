@@ -14,7 +14,7 @@ hornNotes = \fixed c' {
   r8 cis'4.\f ~ cis'4 cis'8 cis' |
   r8 cis'4. ~ cis'4 cis'8 cis' |
   r8 cis'4. d'4 d'8 d' |
-  bis2\f r4\fermata |
+  bis2\f r2\fermata |
 
   % Part II: Section A — Muted Trumpet & Marimba (mm. 9-16) -> STOP 2
   e'4.\p dis'8 cis'4. e'8 |

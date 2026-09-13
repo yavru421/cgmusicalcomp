@@ -14,7 +14,7 @@ tromboneNotes = \fixed c' {
   r4 cis8\f cis r4 cis |
   r4 b,8\f\glissando cis r2 |
   r4 a,8\f a, r4 d |
-  gis,2\f r4\fermata |
+  gis,2\f r2\fermata |
 
   % Part II: Section A — Muted Trumpet & Marimba (mm. 9-16) - Tacet -> STOP 2
   R1 * 7 |

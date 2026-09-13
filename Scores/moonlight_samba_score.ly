@@ -1,7 +1,7 @@
 \version "2.24.0"
 \include "articulate.ly"
 
-\include "../Global/global_settings.ily"
+\include "../Global/conductor_geometry.ily"
 \include "../Global/moonlight_samba_global.ily"
 
 % Woodwinds
@@ -9,11 +9,13 @@
 \include "../Notes/moonlight_samba_oboe.ily"
 \include "../Notes/moonlight_samba_clarinet.ily"
 \include "../Notes/moonlight_samba_altosax.ily"
+\include "../Notes/moonlight_samba_tenorsax.ily"
 
 % Brass
 \include "../Notes/moonlight_samba_trumpet.ily"
 \include "../Notes/moonlight_samba_horn.ily"
 \include "../Notes/moonlight_samba_trombone.ily"
+\include "../Notes/moonlight_samba_euphonium.ily"
 \include "../Notes/moonlight_samba_tuba.ily"
 
 % Rhythm (Electric Bass)
@@ -29,13 +31,11 @@
 \include "../Notes/moonlight_samba_percussion3.ily"
 \include "../Notes/moonlight_samba_timpani.ily"
 
-#(set-global-staff-size 11)
-
 \moonlightSambaHeader
 
 % ============================================================================
 % 1. VISUAL ENGRAVED CONDUCTOR SCORE (Authentic Concert Band Layout)
-% Absolutely Zero Strings Section (Electric Bass provides rhythm anchor)
+% Expanded 16-Voice Concert Band Core with Euphonium & Tenor Saxophone
 % ============================================================================
 \score {
   <<
@@ -52,6 +52,9 @@
       \new Staff \with { instrumentName = #"Alto Saxophone" shortInstrumentName = #"A.Sax" } {
         << \moonlightSambaGlobal \transpose ees c' \altoSaxNotes >>
       }
+      \new Staff \with { instrumentName = #"Tenor Saxophone" shortInstrumentName = #"T.Sax" } {
+        << \moonlightSambaGlobal \transpose bes c \tenorSaxNotes >>
+      }
     >>
 
     \new StaffGroup = "Brass" <<
@@ -63,6 +66,9 @@
       }
       \new Staff \with { instrumentName = #"Trombone" shortInstrumentName = #"Tbn." } {
         << \moonlightSambaGlobal \tromboneNotes >>
+      }
+      \new Staff \with { instrumentName = #"Euphonium" shortInstrumentName = #"Euph." } {
+        << \moonlightSambaGlobal \euphoniumNotes >>
       }
       \new Staff \with { instrumentName = #"Tuba" shortInstrumentName = #"Tba." } {
         << \moonlightSambaGlobal \tubaNotes >>
@@ -99,12 +105,7 @@
       }
     >>
   >>
-  \layout {
-    \context {
-      \Score
-      \override BarNumber.break-visibility = ##(#f #t #t)
-    }
-  }
+  \layout { }
 }
 
 % ============================================================================
@@ -124,6 +125,9 @@
     \new Staff \with { midiInstrument = #"alto sax" } {
       << \moonlightSambaGlobal \altoSaxNotes >>
     }
+    \new Staff \with { midiInstrument = #"tenor sax" } {
+      << \moonlightSambaGlobal \tenorSaxNotes >>
+    }
     \new Staff \with { midiInstrument = #"trumpet" } {
       << \moonlightSambaGlobal \trumpetNotes >>
     }
@@ -132,6 +136,9 @@
     }
     \new Staff \with { midiInstrument = #"trombone" } {
       << \moonlightSambaGlobal \tromboneNotes >>
+    }
+    \new Staff \with { midiInstrument = #"french horn" } {
+      << \moonlightSambaGlobal \euphoniumNotes >>
     }
     \new Staff \with { midiInstrument = #"tuba" } {
       << \moonlightSambaGlobal \tubaNotes >>
@@ -147,25 +154,21 @@
     }
     \new DrumStaff \with {
       midiInstrument = #"standard kit"
-      midiChannel = #9
     } {
       << \moonlightSambaGlobal \percussionOneNotes >>
     }
     \new DrumStaff \with {
       midiInstrument = #"standard kit"
-      midiChannel = #10
     } {
       << \moonlightSambaGlobal \percussionTwoNotes >>
     }
     \new DrumStaff \with {
       midiInstrument = #"standard kit"
-      midiChannel = #11
     } {
       << \moonlightSambaGlobal \percussionThreeNotes >>
     }
     \new Staff \with {
       midiInstrument = #"timpani"
-      midiChannel = #12
     } {
       << \moonlightSambaGlobal \timpaniNotes >>
     }
