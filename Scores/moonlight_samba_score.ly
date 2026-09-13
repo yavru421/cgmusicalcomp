@@ -145,16 +145,28 @@
     \new Staff \with { midiInstrument = #"marimba" } {
       << \moonlightSambaGlobal \marimbaNotes >>
     }
-    \new DrumStaff \with { midiInstrument = #"standard kit" } {
+    \new DrumStaff \with {
+      midiInstrument = #"standard kit"
+      midiChannel = #9
+    } {
       << \moonlightSambaGlobal \percussionOneNotes >>
     }
-    \new DrumStaff \with { midiInstrument = #"standard kit" } {
+    \new DrumStaff \with {
+      midiInstrument = #"standard kit"
+      midiChannel = #10
+    } {
       << \moonlightSambaGlobal \percussionTwoNotes >>
     }
-    \new DrumStaff \with { midiInstrument = #"standard kit" } {
+    \new DrumStaff \with {
+      midiInstrument = #"standard kit"
+      midiChannel = #11
+    } {
       << \moonlightSambaGlobal \percussionThreeNotes >>
     }
-    \new Staff \with { midiInstrument = #"timpani" } {
+    \new Staff \with {
+      midiInstrument = #"timpani"
+      midiChannel = #12
+    } {
       << \moonlightSambaGlobal \timpaniNotes >>
     }
   >>

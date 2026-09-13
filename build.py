@@ -94,11 +94,11 @@ def render_fluidsynth(mid_path: str, out_wav_path: str) -> bool:
         FLUIDSYNTH,
         "-F", out_wav_path,
         "-o", "synth.reverb.active=1",
-        "-o", "synth.reverb.room-size=0.75",
-        "-o", "synth.reverb.damp=0.25",
-        "-o", "synth.reverb.width=0.85",
-        "-o", "synth.reverb.level=0.55",
-        "-o", "synth.gain=0.35",
+        "-o", "synth.reverb.room-size=0.45",
+        "-o", "synth.reverb.damp=0.60",
+        "-o", "synth.reverb.width=0.75",
+        "-o", "synth.reverb.level=0.25",
+        "-o", "synth.gain=0.45",
         SOUNDFONT,
         mid_path
     ]
