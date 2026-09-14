@@ -134,7 +134,7 @@ def extract_and_render_dry_stems(input_midi: str, scratch_dir: str, sample_rate:
 
     return dry_stem_files
 
-def render_binaural_master(input_midi: str, output_wav: str, rt60: float = 1.8, room_depth: float = 28.0, room_width: float = 20.0):
+def render_binaural_master(input_midi: str, output_wav: str, rt60: float = 1.8, room_depth: float = 28.0, room_width: float = 20.0, duration_sec: float = 90.0):
     """
     Full pipeline: Multi-track MIDI -> 14 Dry Stems -> AD107 CUDA SM_89 Batched P-OLA Convolution -> Master Stereo WAV.
     """
@@ -168,12 +168,16 @@ def render_binaural_master(input_midi: str, output_wav: str, rt60: float = 1.8, 
         if len(data) > max_len:
             max_len = len(data)
 
+    if duration_sec > 0:
+        max_len = min(max_len, int(sample_rate * duration_sec))
+
     h_stems = np.zeros((14, max_len), dtype=np.float32)
     for i in range(min(num_stems, 14)):
-        h_stems[i, :len(stem_data_list[i])] = stem_data_list[i]
+        stem_len = min(len(stem_data_list[i]), max_len)
+        h_stems[i, :stem_len] = stem_data_list[i][:stem_len]
 
-    duration_sec = max_len / sample_rate
-    print(f"  Total Master Length: {max_len:,} samples ({duration_sec:.2f} s / {duration_sec/60:.2f} min)")
+    actual_duration = max_len / sample_rate
+    print(f"  Processed Segment Length: {max_len:,} samples ({actual_duration:.2f} s / {actual_duration/60:.2f} min)")
 
     # 4. Initialize CUDA Batched P-OLA Engine
     block_size = 1024
@@ -251,6 +255,7 @@ if __name__ == "__main__":
     parser.add_argument("--rt60", type=float, default=1.8, help="Hall reverberation time RT60 in seconds")
     parser.add_argument("--depth", type=float, default=28.0, help="Hall depth in meters")
     parser.add_argument("--width", type=float, default=20.0, help="Hall width in meters")
+    parser.add_argument("--duration", type=float, default=90.0, help="Segment duration in seconds (default 90.0s = 1.5 min)")
     args = parser.parse_args()
 
-    render_binaural_master(args.input_midi, args.output, args.rt60, args.depth, args.width)
+    render_binaural_master(args.input_midi, args.output, args.rt60, args.depth, args.width, args.duration)

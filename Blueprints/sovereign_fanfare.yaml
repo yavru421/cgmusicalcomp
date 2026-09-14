@@ -1,0 +1,37 @@
+title: Sovereign Fanfare
+subtitle: Core Medley Lead & Concert Rhythm
+composer: J. D. Dondlinger
+arranger: Arranged for Wisconsin Rapids City Band by J. D. Dondlinger
+movements:
+- name: "Theme I \u2014 Sovereign Fanfare"
+  bars: 32
+  tempo: 120
+  time: 4/4
+  key: d \minor
+  chords:
+  - Dm
+  - Bb
+  - C
+  - F
+  - Gm
+  - A7
+  - Dm
+  - C
+  perc_groove: standard_rock
+  lead_instruments:
+  - flute
+  - trumpet
+  - alto sax
+  counter_instruments:
+  - clarinet
+  - tenor sax
+  chord_instruments:
+  - french horn
+  - trombone
+  bass_instruments:
+  - tuba
+  - electric bass
+  perc_instruments:
+  - drum kit
+  - timpani
+  - marimba

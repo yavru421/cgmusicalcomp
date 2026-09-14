@@ -116,18 +116,28 @@ def render_fluidsynth(mid_path: str, out_wav_path: str) -> bool:
         print(f"[ERROR] FluidSynth render failed: {e}", file=sys.stderr)
         return False
 
-def build_score(piece_name: str = "moonlight_samba", skip_audio: bool = False):
-    print(f"\n=================================================================")
-    print(f"  Building Conductor Score & Masters: {piece_name}")
-    print(f"=================================================================")
+def build_score(piece_name: str = "city_of_evil", skip_audio: bool = False, full_band: bool = False):
     scores_dir = os.path.join(WORKDIR, "Scores")
-    ly_file = os.path.join(scores_dir, f"{piece_name}_score.ly")
-    if not os.path.exists(ly_file):
-        # Fallback to root piece
-        ly_file = os.path.join(WORKDIR, f"{piece_name}.ly")
+    
+    if full_band:
+        mode_str = "Full Conductor Score (14 Voices)"
+        ly_file = os.path.join(scores_dir, f"{piece_name}_score.ly")
         if not os.path.exists(ly_file):
-            print(f"[ERROR] Score definition not found for: {piece_name}", file=sys.stderr)
-            return False
+            ly_file = os.path.join(WORKDIR, f"{piece_name}.ly")
+    else:
+        mode_str = "Core Medley Lead & Masters"
+        ly_file = os.path.join(scores_dir, f"{piece_name}_core_medley.ly")
+        if not os.path.exists(ly_file):
+            ly_file = os.path.join(scores_dir, f"{piece_name}_score.ly")
+            if not os.path.exists(ly_file):
+                ly_file = os.path.join(WORKDIR, f"{piece_name}.ly")
+
+    print(f"\n=================================================================")
+    print(f"  Building {mode_str}: {piece_name}")
+    print(f"=================================================================")
+    if not os.path.exists(ly_file):
+        print(f"[ERROR] Score definition not found for: {piece_name}", file=sys.stderr)
+        return False
 
     out_prefix = os.path.splitext(ly_file)[0]
     raw_mid = f"{out_prefix}.mid"
@@ -226,8 +236,10 @@ Examples:
   python build.py --clean                     # Clean intermediate scratch files
 """
     )
-    parser.add_argument("--all", action="store_true", help="Build full score, musician parts, and audio master")
-    parser.add_argument("--score", default="moonlight_samba", help="Piece name to build (default: moonlight_samba)")
+    parser.add_argument("--all", action="store_true", help="Build score, musician parts, and audio master")
+    parser.add_argument("--score", default="city_of_evil", help="Piece name to build (default: city_of_evil)")
+    parser.add_argument("--core", action="store_true", default=True, help="Build Core Medley Instrument suite (default)")
+    parser.add_argument("--full-band", action="store_true", help="Build full 14-voice conductor score and parts")
     parser.add_argument("--parts", action="store_true", help="Compile individual musician parts")
     parser.add_argument("--skip-audio", action="store_true", help="Skip FluidSynth audio rendering")
     parser.add_argument("--clean", action="store_true", help="Clean scratch and temporary files")
@@ -241,17 +253,18 @@ Examples:
         sys.exit(0)
 
     if args.all:
-        build_score(args.score, skip_audio=args.skip_audio)
-        build_parts(args.score)
-        print("\n[ALL] Full publishing suite generated successfully.")
+        build_score(args.score, skip_audio=args.skip_audio, full_band=args.full_band)
+        if args.full_band:
+            build_parts(args.score)
+        print("\n[ALL] Publishing suite generated successfully.")
         sys.exit(0)
 
     if args.parts:
-        success = build_parts(args.score if args.score != "moonlight_samba" else None)
+        success = build_parts(args.score if args.score != "city_of_evil" else None)
         sys.exit(0 if success else 1)
 
     # Default action: build specified score
-    success = build_score(args.score, skip_audio=args.skip_audio)
+    success = build_score(args.score, skip_audio=args.skip_audio, full_band=args.full_band)
     sys.exit(0 if success else 1)
 
 if __name__ == "__main__":

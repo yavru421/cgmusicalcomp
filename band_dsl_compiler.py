@@ -198,6 +198,19 @@ VOICE_SPECS: Dict[str, Dict] = {
         "is_wind": False,
         "ly_fixed": r"\fixed c'",
     },
+    "glockenspiel": {
+        "name": "Glockenspiel",
+        "staff_group": "Percussion",
+        "clef": "treble",
+        "gm_prog": 9,        # GM Glockenspiel
+        "pan": 34,           # Left
+        "min_midi": 82,      # Bb5
+        "max_midi": 98,      # D7
+        "sweet_min": 84,     # C6
+        "sweet_max": 96,     # C7
+        "is_wind": False,
+        "ly_fixed": r"\fixed c'''",
+    },
     "drum kit": {
         "name": "Concert Percussion",
         "staff_group": "Percussion",
@@ -280,6 +293,44 @@ def parse_chord(symbol: str) -> Tuple[int, List[int]]:
     qual_str = sym[qual_start:]
     intervals = CHORD_QUALITIES.get(qual_str, [0, 4, 7])
     return root_pc, intervals
+
+def chord_to_chordmode(sym: str, duration_str: str = "1") -> str:
+    sym = sym.strip()
+    if not sym:
+        return f"c{duration_str}"
+    root_str = sym[0].lower()
+    qual = ""
+    idx = 1
+    if len(sym) > 1 and sym[1] in ("#", "b", "B"):
+        acc = sym[1]
+        if acc == "#":
+            root_str += "is"
+        elif acc in ("b", "B"):
+            if root_str == "b":
+                root_str = "bes"
+            elif root_str == "e":
+                root_str = "ees"
+            elif root_str == "a":
+                root_str = "aes"
+            else:
+                root_str += "es"
+        idx = 2
+    raw_qual = sym[idx:]
+    if raw_qual in ("m", "min", "-"):
+        qual = ":m"
+    elif raw_qual in ("m7", "min7"):
+        qual = ":m7"
+    elif raw_qual in ("7", "dom7"):
+        qual = ":7"
+    elif raw_qual in ("maj7", "M7"):
+        qual = ":maj7"
+    elif raw_qual in ("dim", "o"):
+        qual = ":dim"
+    elif raw_qual in ("aug", "+"):
+        qual = ":aug"
+    elif raw_qual == "sus4":
+        qual = ":sus4"
+    return f"{root_str}{duration_str}{qual}"
 
 def select_nearest_pitch(target_pc: int, last_pitch: Optional[int], min_m: int, max_m: int) -> int:
     candidates = [m for m in range(min_m, max_m + 1) if m % 12 == target_pc % 12]
@@ -369,7 +420,297 @@ class BandDSLCompiler:
         self.arranger = blueprint.get("arranger", "Arranged for Wisconsin Rapids City Band")
         self.movements = blueprint.get("movements", [])
         
-    def compile(self) -> Tuple[str, bytes, Dict[str, Any]]:
+    def compile(self, core_only: bool = True) -> Tuple[str, bytes, Dict[str, Any]]:
+        if core_only:
+            return self.compile_core_medley()
+        return self.compile_full_band()
+
+    def compile_core_medley(self) -> Tuple[str, bytes, Dict[str, Any]]:
+        t0 = time.perf_counter()
+        ticks_per_beat = 480
+        
+        conductor_track = FastMidiTrack("Conductor Master")
+        lead_track = FastMidiTrack("Core Medley Lead")
+        bass_track = FastMidiTrack("Core Medley Bass")
+        drums_track = FastMidiTrack("Core Percussion")
+        
+        # Lead: Concert Lead Trumpet (GM 56), Pan 60, Ch 0 (Piano strictly banned)
+        lead_track.add_event(0, bytes([0xC0, 56]))
+        lead_track.add_event(0, bytes([0xB0, 10, 60]))
+        lead_track.add_event(0, bytes([0xB0, 7, 105]))
+        lead_track.add_event(0, bytes([0xB0, 11, 100]))
+        
+        # Bass: Finger Bass (GM 33), Pan 64, Ch 1
+        bass_track.add_event(0, bytes([0xC1, 33]))
+        bass_track.add_event(0, bytes([0xB1, 10, 64]))
+        bass_track.add_event(0, bytes([0xB1, 7, 95]))
+        bass_track.add_event(0, bytes([0xB1, 11, 100]))
+        
+        # Drums: Standard Drums, Pan 64, Ch 9
+        drums_track.add_event(0, bytes([0xC9, 0]))
+        drums_track.add_event(0, bytes([0xB9, 10, 64]))
+        drums_track.add_event(0, bytes([0xB9, 7, 90]))
+        
+        ly_chords = []
+        ly_lead = []
+        ly_bass = []
+        ly_drums = []
+        
+        total_measures = 0
+        global_tick = 0
+        last_lead_p = None
+        last_bass_p = None
+        
+        for mov_idx, mov in enumerate(self.movements):
+            mov_name = mov.get("name", f"Movement {mov_idx + 1}")
+            bars = mov.get("bars", 16)
+            tempo_bpm = mov.get("tempo", 120)
+            time_sig = mov.get("time", "4/4")
+            key_sig = mov.get("key", "c \\major")
+            chords_list = mov.get("chords", ["Dm", "Bb", "C", "F"])
+            perc_groove = mov.get("perc_groove", "standard_rock")
+            
+            num_beats, beat_type = map(int, time_sig.split("/"))
+            beats_per_bar = num_beats if beat_type == 4 else (num_beats * 4 // beat_type)
+            ticks_per_bar = int(beats_per_bar * ticks_per_beat)
+            tempo_microsec = mido.bpm2tempo(tempo_bpm)
+            
+            conductor_track.add_event(global_tick, b'\xFF\x51\x03' + tempo_microsec.to_bytes(3, 'big'))
+            denom_pow2 = 2 if beat_type == 4 else (3 if beat_type == 8 else 1)
+            conductor_track.add_event(global_tick, b'\xFF\x58\x04' + bytes([num_beats, denom_pow2, 24, 8]))
+            marker_bytes = mov_name.encode('latin-1', errors='replace')
+            conductor_track.add_event(global_tick, b'\xFF\x06' + bytes([len(marker_bytes)]) + marker_bytes)
+            
+            clean_mov = mov_name.replace('"', '\\"')
+            sec_header = f"\n  % --- {clean_mov} (mm. {total_measures + 1}-{total_measures + bars}) ---"
+            ly_chords.append(sec_header)
+            ly_chords.append(f"  \\time {time_sig}")
+            
+            ly_lead.append(sec_header)
+            ly_lead.append(f"  \\time {time_sig}")
+            ly_lead.append(f"  \\key {key_sig}")
+            ly_lead.append(f'  \\tempo "{clean_mov}" 4 = {tempo_bpm}')
+            
+            ly_bass.append(sec_header)
+            ly_bass.append(f"  \\time {time_sig}")
+            ly_bass.append(f"  \\key {key_sig}")
+            
+            ly_drums.append(sec_header)
+            ly_drums.append(f"  \\time {time_sig}")
+            
+            dur_sym = "1" if time_sig == "4/4" else ("2." if time_sig in ("3/4", "6/8") else "1")
+            
+            for bar_idx in range(bars):
+                measure_start_tick = global_tick + (bar_idx * ticks_per_bar)
+                chord_sym = chords_list[bar_idx % len(chords_list)]
+                root_pc, intervals = parse_chord(chord_sym)
+                chord_pcs = [(root_pc + iv) % 12 for iv in intervals]
+                
+                # 1. Chords
+                ly_chords.append(f"  {chord_to_chordmode(chord_sym, dur_sym)} |")
+                
+                # 2. Lead Melody (Sweet vocal range C4=60 to G5=77)
+                t3rd = chord_pcs[1] if len(chord_pcs) > 1 else root_pc
+                t5th = chord_pcs[2] if len(chord_pcs) > 2 else root_pc
+                p1 = select_nearest_pitch(root_pc, last_lead_p, 60, 77)
+                p2 = select_nearest_pitch(t3rd, p1, 60, 77)
+                p3 = select_nearest_pitch(t5th, p2, 60, 77)
+                last_lead_p = p3
+                
+                ly1 = midi_to_lilypond(p1, base_octave=4)
+                ly2 = midi_to_lilypond(p2, base_octave=4)
+                ly3 = midi_to_lilypond(p3, base_octave=4)
+                
+                if time_sig == "4/4":
+                    ly_lead.append(f"  {ly1}4\\f {ly2}8 {ly3} {ly1}2 |")
+                    q_ticks = ticks_per_beat
+                    e_ticks = int(ticks_per_beat / 2)
+                    lead_track.add_event(measure_start_tick, bytes([0x90, p1, 102]))
+                    lead_track.add_event(measure_start_tick + q_ticks - 20, bytes([0x80, p1, 64]))
+                    lead_track.add_event(measure_start_tick + q_ticks, bytes([0x90, p2, 96]))
+                    lead_track.add_event(measure_start_tick + q_ticks + e_ticks - 20, bytes([0x80, p2, 64]))
+                    lead_track.add_event(measure_start_tick + q_ticks + e_ticks, bytes([0x90, p3, 98]))
+                    lead_track.add_event(measure_start_tick + (2 * ticks_per_beat) - 20, bytes([0x80, p3, 64]))
+                    lead_track.add_event(measure_start_tick + (2 * ticks_per_beat), bytes([0x90, p1, 104]))
+                    lead_track.add_event(measure_start_tick + ticks_per_bar - 20, bytes([0x80, p1, 64]))
+                elif time_sig == "3/4":
+                    ly_lead.append(f"  {ly1}4.\\f {ly2}8 {ly3}4 |")
+                    lead_track.add_event(measure_start_tick, bytes([0x90, p1, 100]))
+                    lead_track.add_event(measure_start_tick + 700, bytes([0x80, p1, 64]))
+                    lead_track.add_event(measure_start_tick + 720, bytes([0x90, p2, 94]))
+                    lead_track.add_event(measure_start_tick + 940, bytes([0x80, p2, 64]))
+                    lead_track.add_event(measure_start_tick + 960, bytes([0x90, p3, 98]))
+                    lead_track.add_event(measure_start_tick + ticks_per_bar - 20, bytes([0x80, p3, 64]))
+                elif time_sig == "6/8":
+                    ly_lead.append(f"  {ly1}8 {ly2} {ly3} {ly1}4. |")
+                    e_ticks = int(ticks_per_bar / 6)
+                    dq_ticks = int(ticks_per_bar / 2)
+                    lead_track.add_event(measure_start_tick, bytes([0x90, p1, 98]))
+                    lead_track.add_event(measure_start_tick + e_ticks - 10, bytes([0x80, p1, 64]))
+                    lead_track.add_event(measure_start_tick + e_ticks, bytes([0x90, p2, 94]))
+                    lead_track.add_event(measure_start_tick + (2 * e_ticks) - 10, bytes([0x80, p2, 64]))
+                    lead_track.add_event(measure_start_tick + (2 * e_ticks), bytes([0x90, p3, 96]))
+                    lead_track.add_event(measure_start_tick + (3 * e_ticks) - 10, bytes([0x80, p3, 64]))
+                    lead_track.add_event(measure_start_tick + dq_ticks, bytes([0x90, p1, 102]))
+                    lead_track.add_event(measure_start_tick + ticks_per_bar - 20, bytes([0x80, p1, 64]))
+                else:
+                    ly_lead.append(f"  {ly1}1\\f |")
+                    lead_track.add_event(measure_start_tick, bytes([0x90, p1, 100]))
+                    lead_track.add_event(measure_start_tick + ticks_per_bar - 20, bytes([0x80, p1, 64]))
+                    
+                # 3. Bass Line (E1=28 to G3=55)
+                p_bass = select_nearest_pitch(root_pc, last_bass_p, 36, 52)
+                last_bass_p = p_bass
+                ly_b = midi_to_lilypond(p_bass, base_octave=3)
+                
+                if time_sig == "4/4":
+                    ly_bass.append(f"  {ly_b}2\\mf {ly_b}2 |")
+                    half_ticks = int(ticks_per_bar / 2)
+                    bass_track.add_event(measure_start_tick, bytes([0x91, p_bass, 92]))
+                    bass_track.add_event(measure_start_tick + half_ticks - 20, bytes([0x81, p_bass, 64]))
+                    bass_track.add_event(measure_start_tick + half_ticks, bytes([0x91, p_bass, 88]))
+                    bass_track.add_event(measure_start_tick + ticks_per_bar - 20, bytes([0x81, p_bass, 64]))
+                elif time_sig in ("3/4", "6/8"):
+                    ly_bass.append(f"  {ly_b}2.\\mf |")
+                    bass_track.add_event(measure_start_tick, bytes([0x91, p_bass, 90]))
+                    bass_track.add_event(measure_start_tick + ticks_per_bar - 40, bytes([0x81, p_bass, 64]))
+                else:
+                    ly_bass.append(f"  {ly_b}1\\mf |")
+                    bass_track.add_event(measure_start_tick, bytes([0x91, p_bass, 90]))
+                    bass_track.add_event(measure_start_tick + ticks_per_bar - 40, bytes([0x81, p_bass, 64]))
+                    
+                # 4. Drum kit
+                if perc_groove in ("metal_doublekick", "fast_rock"):
+                    ly_drums.append("  bd4 sn8 bd bd4 sn |")
+                    drums_track.add_event(measure_start_tick, bytes([0x99, 49, 96]))
+                    drums_track.add_event(measure_start_tick, bytes([0x99, 36, 104]))
+                    drums_track.add_event(measure_start_tick + 240, bytes([0x89, 49, 64]))
+                    drums_track.add_event(measure_start_tick + 240, bytes([0x89, 36, 64]))
+                    drums_track.add_event(measure_start_tick + 480, bytes([0x99, 38, 108]))
+                    drums_track.add_event(measure_start_tick + 480, bytes([0x99, 36, 90]))
+                    drums_track.add_event(measure_start_tick + 720, bytes([0x89, 38, 64]))
+                    drums_track.add_event(measure_start_tick + 720, bytes([0x89, 36, 64]))
+                    drums_track.add_event(measure_start_tick + 960, bytes([0x99, 36, 96]))
+                    drums_track.add_event(measure_start_tick + 1200, bytes([0x89, 36, 64]))
+                    drums_track.add_event(measure_start_tick + 1440, bytes([0x99, 38, 110]))
+                    drums_track.add_event(measure_start_tick + 1680, bytes([0x89, 38, 64]))
+                elif perc_groove == "flamenco_68":
+                    ly_drums.append("  bd4. sn4. |")
+                    half_b = int(ticks_per_bar / 2)
+                    drums_track.add_event(measure_start_tick, bytes([0x99, 36, 100]))
+                    drums_track.add_event(measure_start_tick + half_b - 20, bytes([0x89, 36, 64]))
+                    drums_track.add_event(measure_start_tick + half_b, bytes([0x99, 38, 105]))
+                    drums_track.add_event(measure_start_tick + ticks_per_bar - 20, bytes([0x89, 38, 64]))
+                elif perc_groove == "choral_waltz" or time_sig == "3/4":
+                    ly_drums.append("  bd4 sn sn |")
+                    drums_track.add_event(measure_start_tick, bytes([0x99, 36, 95]))
+                    drums_track.add_event(measure_start_tick + 400, bytes([0x89, 36, 64]))
+                    drums_track.add_event(measure_start_tick + ticks_per_beat, bytes([0x99, 38, 85]))
+                    drums_track.add_event(measure_start_tick + ticks_per_beat + 400, bytes([0x89, 38, 64]))
+                    drums_track.add_event(measure_start_tick + (2 * ticks_per_beat), bytes([0x99, 38, 85]))
+                    drums_track.add_event(measure_start_tick + (2 * ticks_per_beat) + 400, bytes([0x89, 38, 64]))
+                else:
+                    ly_drums.append("  bd4 sn8 bd bd4 sn |")
+                    drums_track.add_event(measure_start_tick, bytes([0x99, 36, 100]))
+                    drums_track.add_event(measure_start_tick + 400, bytes([0x89, 36, 64]))
+                    drums_track.add_event(measure_start_tick + ticks_per_beat, bytes([0x99, 38, 100]))
+                    drums_track.add_event(measure_start_tick + ticks_per_beat + 400, bytes([0x89, 36, 64]))
+                    drums_track.add_event(measure_start_tick + (2 * ticks_per_beat), bytes([0x99, 36, 95]))
+                    drums_track.add_event(measure_start_tick + (2 * ticks_per_beat) + 400, bytes([0x89, 36, 64]))
+                    drums_track.add_event(measure_start_tick + (3 * ticks_per_beat), bytes([0x99, 38, 105]))
+                    drums_track.add_event(measure_start_tick + (3 * ticks_per_beat) + 400, bytes([0x89, 38, 64]))
+            
+            total_measures += bars
+            global_tick += (bars * ticks_per_bar)
+            
+        ly_lines = [
+            r'\version "2.24.0"',
+            r'\include "articulate.ly"',
+            "",
+            r'\header {',
+            f'  title = "{self.title}"',
+            f'  subtitle = "{self.subtitle} [Core Medley Lead]"',
+            f'  composer = "{self.composer}"',
+            f'  arranger = "{self.arranger}"',
+            f'  tagline = "{self.title} — Core Medley Lead (Deterministic Band DSL Compiler)"',
+            r'}',
+            "",
+            r'#(set-global-staff-size 15)',
+            "",
+            r'\paper {',
+            r'  #(set-paper-size "letter")',
+            r'  top-margin = 0.5\in',
+            r'  bottom-margin = 0.5\in',
+            r'  left-margin = 0.55\in',
+            r'  right-margin = 0.5\in',
+            r'  ragged-last-bottom = ##f',
+            r'}',
+            "",
+            "% " + ("=" * 70),
+            "% Harmony Chords",
+            "% " + ("=" * 70),
+            "chordTrack = \\chordmode {",
+        ]
+        ly_lines.extend(ly_chords)
+        ly_lines.append("}\n")
+        
+        ly_lines.append("% " + ("=" * 70))
+        ly_lines.append("% Core Lead (Melody)")
+        ly_lines.append("% " + ("=" * 70))
+        ly_lines.append(r"coreLeadPart = \fixed c' {")
+        ly_lines.append(r"  \clef treble")
+        ly_lines.extend(ly_lead)
+        ly_lines.append(r'  \bar "|."')
+        ly_lines.append("}\n")
+        
+        ly_lines.append("% " + ("=" * 70))
+        ly_lines.append("% Core Bass / Accompaniment")
+        ly_lines.append("% " + ("=" * 70))
+        ly_lines.append(r"coreBassPart = \fixed c {")
+        ly_lines.append(r"  \clef bass")
+        ly_lines.extend(ly_bass)
+        ly_lines.append(r'  \bar "|."')
+        ly_lines.append("}\n")
+        
+        ly_lines.append("% " + ("=" * 70))
+        ly_lines.append("% Core Drums")
+        ly_lines.append("% " + ("=" * 70))
+        ly_lines.append(r"coreDrumsPart = \drummode {")
+        ly_lines.extend(ly_drums)
+        ly_lines.append(r'  \bar "|."')
+        ly_lines.append("}\n")
+        
+        ly_lines.append(r"\score {")
+        ly_lines.append(r"  <<")
+        ly_lines.append(r"    \new ChordNames { \chordTrack }")
+        ly_lines.append(r'    \new StaffGroup = "CoreMedley" \with { instrumentName = #"Core Medley" shortInstrumentName = #"Core" } <<')
+        ly_lines.append(r'      \new Staff = "upper" \with { instrumentName = #"Concert Lead" shortInstrumentName = #"Lead" } { \coreLeadPart }')
+        ly_lines.append(r'      \new Staff = "lower" \with { instrumentName = #"Tuba / Bass" shortInstrumentName = #"Bass" } { \coreBassPart }')
+        ly_lines.append(r"    >>")
+        ly_lines.append(r'    \new DrumStaff \with { instrumentName = #"Drums" shortInstrumentName = #"Dr." } { \coreDrumsPart }')
+        ly_lines.append(r"  >>")
+        ly_lines.append(r"  \layout { }")
+        ly_lines.append(r"  \midi { }")
+        ly_lines.append(r"}")
+        
+        lilypond_source = "\n".join(ly_lines)
+        all_tracks = [conductor_track, lead_track, bass_track, drums_track]
+        raw_midi_bytes = build_midi_file_bytes(all_tracks, division=ticks_per_beat)
+        
+        dt_ms = (time.perf_counter() - t0) * 1000.0
+        meta = {
+            "duration_ms": round(dt_ms, 2),
+            "total_measures": total_measures,
+            "movements": len(self.movements),
+            "voices": "Core Medley (Grand Staff + Chords + Battery)",
+            "mode": "core_medley",
+            "tokens_eliminated": "~22,000",
+            "midi_size_bytes": len(raw_midi_bytes),
+            "lilypond_chars": len(lilypond_source)
+        }
+        return lilypond_source, raw_midi_bytes, meta
+
+    def compile_full_band(self) -> Tuple[str, bytes, Dict[str, Any]]:
         t0 = time.perf_counter()
         ticks_per_beat = 480
         
@@ -852,7 +1193,7 @@ movements:
     perc_instruments: ["drum kit", "timpani", "marimba"]
 """
 
-def compile_blueprint(yaml_path_or_str: str, out_ly: Optional[str] = None, out_mid: Optional[str] = None) -> Tuple[str, bytes, Dict[str, Any]]:
+def compile_blueprint(yaml_path_or_str: str, out_ly: Optional[str] = None, out_mid: Optional[str] = None, core_only: bool = True) -> Tuple[str, bytes, Dict[str, Any]]:
     if os.path.exists(yaml_path_or_str):
         with open(yaml_path_or_str, "r", encoding="utf-8") as f:
             data = yaml.safe_load(f)
@@ -860,7 +1201,7 @@ def compile_blueprint(yaml_path_or_str: str, out_ly: Optional[str] = None, out_m
         data = yaml.safe_load(yaml_path_or_str)
         
     compiler = BandDSLCompiler(data)
-    ly_code, mid_bytes, meta = compiler.compile()
+    ly_code, mid_bytes, meta = compiler.compile(core_only=core_only)
     
     if out_ly:
         with open(out_ly, "w", encoding="utf-8") as f:
@@ -880,6 +1221,8 @@ def main():
     parser.add_argument("blueprint", nargs="?", default="", help="Path to input YAML blueprint file")
     parser.add_argument("--out-ly", default="", help="Path to output LilyPond score file (.ly)")
     parser.add_argument("--out-mid", default="", help="Path to output MIDI file (.mid)")
+    parser.add_argument("--core", action="store_true", default=True, help="Compile lightweight Core Medley score (default)")
+    parser.add_argument("--full-band", action="store_true", help="Compile complete 14-voice full band conductor score")
     parser.add_argument("--emit-city-of-evil-yaml", default="", help="Dump canonical 400-token City of Evil YAML blueprint")
     parser.add_argument("--benchmark", action="store_true", help="Run 100-iteration compilation latency benchmark")
     
@@ -892,16 +1235,19 @@ def main():
         return
 
     blueprint_source = args.blueprint if args.blueprint else CANONICAL_CITY_OF_EVIL_YAML
-    out_ly = args.out_ly or "dsl_compiled_score.ly"
-    out_mid = args.out_mid or "dsl_compiled_score.mid"
+    core_only = not args.full_band
+    default_stem = "dsl_core_medley" if core_only else "dsl_compiled_score"
+    out_ly = args.out_ly or f"{default_stem}.ly"
+    out_mid = args.out_mid or f"{default_stem}.mid"
     
-    ly_code, mid_bytes, meta = compile_blueprint(blueprint_source, out_ly=out_ly, out_mid=out_mid)
+    ly_code, mid_bytes, meta = compile_blueprint(blueprint_source, out_ly=out_ly, out_mid=out_mid, core_only=core_only)
     
+    mode_tag = "CORE MEDLEY" if core_only else "FULL 14-VOICE BAND"
     print(f"\n=======================================================================")
-    print(f"⚡ BAND DSL COMPILER — EXECUTION TELEMETRY")
+    print(f"⚡ BAND DSL COMPILER — EXECUTION TELEMETRY ({mode_tag})")
     print(f"=======================================================================")
     print(f"  Movements Compiled : {meta['movements']} ({meta['total_measures']} bars)")
-    print(f"  Voices Staged      : {meta['voices']} staves (Woodwinds, Brass, Percussion, Strings)")
+    print(f"  Voices Staged      : {meta['voices']}")
     print(f"  Compilation Latency: {meta['duration_ms']:.2f} ms (Target: < 15.0 ms)")
     print(f"  Token Savings      : {meta['tokens_eliminated']} tokens eliminated")
     print(f"  LilyPond Output    : {out_ly} ({len(ly_code):,} chars)")

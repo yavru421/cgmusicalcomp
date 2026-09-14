@@ -6,11 +6,27 @@
 
 ---
 
-## 📌 Executive Summary
+## 📌 Executive Summary & The Core Medley Mandate
 
-To maintain clean code separation, prevent duplication, and enable automated compilation of both **Conductor Scores** and **Transposed Musician Parts**, all compositions in this repository MUST strictly follow a modular directory structure. 
+### The Core Medley Invariant (Mandatory for ALL New Compositions)
+**STOP GENERATING MONOLITHIC 14-STAVE SCORES FOR COMPOSITION DRAFTS.**
+Generating 14-16 individual instrument staves for initial songwriting, testing, and arranging is strictly forbidden as a default. It causes 30-90s typesetting latency and extreme file bloat.
 
-Notes are written **once** in absolute concert pitch (`\fixed c'`) inside the `Notes/` directory. Scores and individual parts import these note variables and apply key signatures, clefs, transpositions, and formatting directives dynamically.
+**Going Forward Architecture for All New Compositions:**
+1. **Core Medley Instrument (CMI) First**: Every new composition in this repository MUST originate with a unified **Core Medley Instrument** (`Scores/{piece}_core_medley.ly` or `Notes/{piece}_core_medley.ily`).
+2. **Specific Wind or Brass Lead Mandate (ABSOLUTE BAN ON PIANO)**:
+   - **Specific Instrument Allocation**: A **SPECIFIC WIND OR BRASS INSTRUMENT** from the Wisconsin Rapids City Band gets the medley lead each time (e.g., `B♭ Trumpet 1`, `B♭ Clarinet 1`, `Alto Saxophone`, `Flute`, `Tenor Trombone`, or `Euphonium`). Never generate generic or anonymous "Lead" lines.
+   - **No Piano**: The Wisconsin Rapids City Band **does NOT have a piano**. NEVER use `\new PianoStaff` or GM 0 Acoustic Grand Piano.
+   - **Core Layout**:
+     - `\new ChordNames { \chordTrack }`: Complete harmonic movement and chord progressions.
+     - `\new StaffGroup = "CoreMedley"`:
+       - **Specific Wind/Brass Medley Staff**: Labeled and scored for that designated physical instrument (e.g., `B♭ Trumpet 1 (Medley Lead)` or `B♭ Clarinet 1 (Medley Lead)`).
+       - **Tuba / Low Brass Foundation**: Harmonic root motion and bass anchor.
+     - `\new DrumStaff` (Battery Groove) and Tuned Percussion: Snare, Bass Drum, Suspended Cymbal (roll w/ marimba mallets), Bells, and Timpani.
+3. **Turnaround Performance**:
+   - LilyPond compiles in **< 1.5s** (compared to 90s for full score).
+   - FluidSynth synthesizes in **< 0.4s**.
+4. **On-Demand Full Band Expansion**: The 14-voice full concert band score and individual transposed musician parts (`/Parts`) are generated **strictly on demand** via `--full-band` once the core arrangement is approved.
 
 ---
 

@@ -290,6 +290,11 @@ EXPORT_API int cu_binaural_pola_generate_hall_acoustics(
         int ch_L = 2 * s;
         int ch_R = 2 * s + 1;
 
+        // Low-pass filter state for diffuse reverberation to ensure warm concert hall acoustics (zero metallic tinging)
+        float lp_state_L = 0.0f;
+        float lp_state_R = 0.0f;
+        uint32_t rng_state = (uint32_t)(s * 10007 + 1337);
+
         for (int p = 0; p < P; ++p) {
             float* p_L = h_ir_time + (ch_L * P + p) * N;
             float* p_R = h_ir_time + (ch_R * P + p) * N;
@@ -299,18 +304,42 @@ EXPORT_API int cu_binaural_pola_generate_hall_acoustics(
                 float t = (float)global_sample / (float)g_state.sample_rate;
                 float env = expf(-decay_rate * t);
 
+                // 1. Direct Sound (Crisp, natural, dominant)
                 if (p == 0 && n == left_delay) {
-                    p_L[n] += (1.0f / (dist * 0.5f)) * ild_left;
+                    p_L[n] += 0.85f * ild_left;
                 }
                 if (p == 0 && n == right_delay) {
-                    p_R[n] += (1.0f / (dist * 0.5f)) * ild_right;
+                    p_R[n] += 0.85f * ild_right;
                 }
 
-                float noise = sinf(t * 12345.67f + (float)s * 17.0f);
-                float room_echo = noise * env * 0.045f;
+                // 2. Discrete Early Reflections (Floor, Ceiling, Walls)
+                if (p == 0) {
+                    if (n == left_delay + 110)  p_L[n] += 0.15f * ild_left;
+                    if (n == right_delay + 110) p_R[n] += 0.15f * ild_right;
+                    if (n == left_delay + 352)  p_L[n] += 0.10f * ild_left;
+                    if (n == right_delay + 352) p_R[n] += 0.10f * ild_right;
+                    if (n == left_delay + 793)  p_L[n] += 0.08f * ild_left;
+                    if (n == right_delay + 793) p_R[n] += 0.08f * ild_right;
+                } else if (p == 1) {
+                    if (n == (left_delay + 1058) % B)  p_L[n] += 0.06f * ild_left;
+                    if (n == (right_delay + 1058) % B) p_R[n] += 0.06f * ild_right;
+                }
 
-                p_L[n] += room_echo * ild_left;
-                p_R[n] += room_echo * ild_right;
+                // 3. Late Diffuse Reverberation: LCG Pseudo-Random White Noise filtered through 1-pole Low-Pass Filter
+                rng_state = rng_state * 1664525u + 1013904223u;
+                float raw_noise_L = ((float)(rng_state & 0x7FFFFF) / (float)0x7FFFFF) * 2.0f - 1.0f;
+                rng_state = rng_state * 1664525u + 1013904223u;
+                float raw_noise_R = ((float)(rng_state & 0x7FFFFF) / (float)0x7FFFFF) * 2.0f - 1.0f;
+
+                // 1-pole low-pass filter (cutoff ~2.5 kHz) for warm wooden concert hall reverberation
+                lp_state_L = 0.82f * lp_state_L + 0.18f * raw_noise_L;
+                lp_state_R = 0.82f * lp_state_R + 0.18f * raw_noise_R;
+
+                float room_echo_L = lp_state_L * env * 0.012f;
+                float room_echo_R = lp_state_R * env * 0.012f;
+
+                p_L[n] += room_echo_L * ild_left;
+                p_R[n] += room_echo_R * ild_right;
             }
         }
     }

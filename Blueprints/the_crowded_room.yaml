@@ -1,0 +1,50 @@
+# =====================================================================
+# The Crowded Room (Breathe as One) — Composition Blueprint
+# Dedicated to the Wisconsin Rapids City Band
+# Arranger & Composer: John Daniel Dondlinger
+# Concept: Restless polyphony of a crowded room resolving into a luminous, singular unison and shared breath
+# =====================================================================
+title: "The Crowded Room"
+subtitle: "A Symphonic Study in Unison and Shared Breath"
+composer: "J. D. Dondlinger"
+arranger: "Arranged for Wisconsin Rapids City Band"
+
+movements:
+  - name: "I. The Crowded Room (Restless Voices)"
+    bars: 28
+    tempo: 128
+    time: "4/4"
+    key: "g \\minor"
+    chords: ["Gm", "Eb", "Cm", "F", "Gm", "Bb", "Eb", "D7", "Gm", "Eb", "F", "Gm"]
+    perc_groove: "fast_rock"
+    lead_instruments: ["trumpet", "alto sax", "flute"]
+    counter_instruments: ["clarinet", "tenor sax"]
+    chord_instruments: ["french horn", "trombone"]
+    bass_instruments: ["tuba", "electric bass"]
+    perc_instruments: ["drum kit", "timpani", "marimba"]
+
+  - name: "II. Convergence (Drawing Near)"
+    bars: 24
+    tempo: 92
+    time: "4/4"
+    key: "bes \\major"
+    chords: ["Eb", "F", "Dm", "Gm", "Cm", "F7", "Bb", "F", "Eb", "F", "Gm", "F7"]
+    perc_groove: "ballad"
+    lead_instruments: ["oboe", "flute", "clarinet"]
+    counter_instruments: ["french horn", "alto sax"]
+    chord_instruments: ["trombone", "trumpet"]
+    bass_instruments: ["tuba", "cello", "electric bass"]
+    perc_instruments: ["marimba", "timpani", "drum kit"]
+
+  - name: "III. Strange Unison (Breathe as One)"
+    bars: 32
+    tempo: 72
+    time: "4/4"
+    key: "bes \\major"
+    chords: ["Bb", "Bb", "F", "Gm", "Eb", "Bb", "Cm", "F7", "Bb", "Eb", "F", "Bb"]
+    perc_groove: "ballad"
+    lead_instruments: ["flute", "trumpet", "clarinet", "alto sax"]
+    counter_instruments: ["french horn", "oboe"]
+    chord_instruments: ["trombone", "tenor sax"]
+    bass_instruments: ["tuba", "electric bass", "cello"]
+    perc_instruments: ["timpani", "marimba", "drum kit"]
