@@ -18,9 +18,22 @@ os.makedirs(PARTS_DIST_DIR, exist_ok=True)
 os.makedirs(RELEASES_DIR, exist_ok=True)
 
 print("[1/5] Building release ZIP bundles...")
-# 1. Zip Moonlight Samba Full Conductor Score & Parts
-moonlight_zip = os.path.join(RELEASES_DIR, "Moonlight_Samba_v1.0.0_ConcertBand_Score_and_Parts.zip")
-with zipfile.ZipFile(moonlight_zip, 'w', zipfile.ZIP_DEFLATED) as zf:
+# 1. Zip Moonlight Sonata Full Conductor Score & Parts
+moonlight_sonata_zip = os.path.join(RELEASES_DIR, "Moonlight_Sonata_v1.0.0_ConcertBand_Score_and_Parts.zip")
+with zipfile.ZipFile(moonlight_sonata_zip, 'w', zipfile.ZIP_DEFLATED) as zf:
+    score_pdf = os.path.join(SCORES_DIR, "moonlight_sonata_score.pdf")
+    if os.path.exists(score_pdf):
+        zf.write(score_pdf, arcname="Moonlight_Sonata_Conductor_Score_Tabloid.pdf")
+    for f in os.listdir(PARTS_DIR):
+        if f.startswith("moonlight_sonata_part_") and f.endswith(".pdf"):
+            zf.write(os.path.join(PARTS_DIR, f), arcname=f"Parts/{f}")
+    zf.write(os.path.join(ROOT, "README.md"), arcname="README.md")
+    zf.write(os.path.join(ROOT, "LICENSE"), arcname="LICENSE")
+print(f"Created {moonlight_sonata_zip}")
+
+# 2. Zip Moonlight Samba Full Conductor Score & Parts
+moonlight_samba_zip = os.path.join(RELEASES_DIR, "Moonlight_Samba_v1.0.0_ConcertBand_Score_and_Parts.zip")
+with zipfile.ZipFile(moonlight_samba_zip, 'w', zipfile.ZIP_DEFLATED) as zf:
     score_pdf = os.path.join(SCORES_DIR, "moonlight_samba_score.pdf")
     if os.path.exists(score_pdf):
         zf.write(score_pdf, arcname="Moonlight_Samba_Conductor_Score_Tabloid.pdf")
@@ -29,25 +42,29 @@ with zipfile.ZipFile(moonlight_zip, 'w', zipfile.ZIP_DEFLATED) as zf:
             zf.write(os.path.join(PARTS_DIR, f), arcname=f"Parts/{f}")
     zf.write(os.path.join(ROOT, "README.md"), arcname="README.md")
     zf.write(os.path.join(ROOT, "LICENSE"), arcname="LICENSE")
-print(f"Created {moonlight_zip}")
+print(f"Created {moonlight_samba_zip}")
 
-# 2. Copy PDFs to dist
+# 3. Copy PDFs to dist
 print("[2/5] Copying PDFs to web dist...")
-shutil.copy2(os.path.join(SCORES_DIR, "moonlight_samba_score.pdf"), os.path.join(PDF_DIR, "moonlight_samba_score.pdf"))
+if os.path.exists(os.path.join(SCORES_DIR, "moonlight_sonata_score.pdf")):
+    shutil.copy2(os.path.join(SCORES_DIR, "moonlight_sonata_score.pdf"), os.path.join(PDF_DIR, "moonlight_sonata_score.pdf"))
+if os.path.exists(os.path.join(SCORES_DIR, "moonlight_samba_score.pdf")):
+    shutil.copy2(os.path.join(SCORES_DIR, "moonlight_samba_score.pdf"), os.path.join(PDF_DIR, "moonlight_samba_score.pdf"))
 if os.path.exists(os.path.join(SCORES_DIR, "still_dre_score.pdf")):
     shutil.copy2(os.path.join(SCORES_DIR, "still_dre_score.pdf"), os.path.join(PDF_DIR, "still_dre_score.pdf"))
 if os.path.exists(os.path.join(SCORES_DIR, "sovereign_forge_score.pdf")):
     shutil.copy2(os.path.join(SCORES_DIR, "sovereign_forge_score.pdf"), os.path.join(PDF_DIR, "sovereign_forge_score.pdf"))
 
-# Copy all Moonlight Samba parts to parts dist
+# Copy all parts to parts dist
 for f in os.listdir(PARTS_DIR):
     if f.endswith(".pdf"):
         shutil.copy2(os.path.join(PARTS_DIR, f), os.path.join(PARTS_DIST_DIR, f))
 
-# 3. Audio conversion / compression for lightweight web streaming
+# 4. Audio conversion / compression for lightweight web streaming
 print("[3/5] Processing web audio streaming masters...")
 tracks = [
     ("moonlight_samba_master.wav", "moonlight_samba.mp3"),
+    ("moonlight_sonata_master.wav", "moonlight_sonata.mp3"),
     ("still_dre_master.wav", "still_dre.mp3"),
     ("sovereign_forge.wav", "sovereign_forge.mp3"),
     ("a_soix_medley.wav", "a_soix_medley.mp3"),

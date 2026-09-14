@@ -31,24 +31,24 @@ tubaNotes = \fixed c' {
   r2. r4\fermata |
 
   % Part IV: Section C — Low Brass Montuno Drive (mm. 25-32) -> STOP 4
-  cis,8\ff dis, e, fis, gis, a, b, c |
-  d4. c8 b,4 a, |
-  gis,4. fis,8 e,4 dis, |
-  cis,2. r4 |
+  cis,,8\ff dis,, e,, fis,, gis,, a,, b,, c, |
+  d,4. c,8 b,,4 a,, |
+  gis,,4. fis,,8 e,,4 dis,, |
+  cis,,2. r4 |
   cis,4-.\f r8 gis,, cis,4-. r8 gis,, |
   d,4-. r8 a,, d,4-. r8 a,, |
   bis,,4-. r8 fis,, bis,,4-. r8 fis,, |
   cis,2. r4\fermata |
 
   % Part V: Section D — Intimate Adagio Bossa Break (mm. 33-40) -> STOP 5
-  cis,,1\pp |
-  b,,,1 |
-  a,,,2 d,, |
-  gis,,,1 |
-  cis,,1 |
-  b,,,1 |
-  a,,,2 d,, |
-  gis,,,2\fermata r2 |
+  cis,1\pp |
+  b,,1 |
+  a,,2 d, |
+  gis,,1 |
+  cis,1 |
+  b,,1 |
+  a,,2 d, |
+  gis,,2\fermata r2 |
 
   % Part VI: Section E — Latin Percussion Soli (mm. 41-44) - Tacet
   R1 * 4 |

@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CGMusicalComposition — Algorithmic Concert Band Engine & Score Jukebox</title>
+  <meta name="description" content="End-to-end algorithmic concert band composition, LilyPond Tabloid 11x17 engraving, and acoustic simulation honoring the 150+ year Wisconsin Rapids City Band heritage.">
+  <meta property="og:title" content="CGMusicalComposition — Algorithmic Concert Band Engine">
+  <meta property="og:description" content="Concert Band Edition: Beethoven Moonlight Sonata (Op. 27 No. 2), G-Funk Still D.R.E., Sovereign Forge. 100% Vector PDF Scores, Transposed Parts & Audio Previews.">
+  <meta property="og:image" content="https://cgmusicalcomp.dondlingergc.com/og-banner.png">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://cgmusicalcomp.dondlingergc.com">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://cgmusicalcomp.dondlingergc.com/og-banner.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#0e1117">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <style>
+    :root {
+      --bg: #0b0e14;
+      --card-bg: #151921;
+      --card-border: #272d38;
+      --accent: #00d2ff;
+      --accent-hover: #00b4db;
+      --gold: #f5a623;
+      --gold-glow: rgba(245, 166, 35, 0.25);
+      --cyan-glow: rgba(0, 210, 255, 0.2);
+      --text: #cbd5e1;
+      --text-bright: #ffffff;
+      --muted: #8492a6;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: var(--font-sans);
+      line-height: 1.5;
+      padding-bottom: 80px;
+      overflow-x: hidden;
+    }
+
+    /* Hero Section */
+    .hero {
+      position: relative;
+      background: radial-gradient(circle at 50% -20%, #1e293b 0%, #0b0e14 70%);
+      border-bottom: 1px solid var(--card-border);
+      padding: 3rem 1.5rem 2.5rem;
+      text-align: center;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 1px;
+      background: linear-gradient(90deg, transparent, #00d2ff, #f5a623, transparent);
+    }
+    .logo-container {
+      display: inline-block;
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    .logo-img {
+      width: 140px;
+      height: 140px;
+      border-radius: 28px;
+      box-shadow: 0 0 40px var(--gold-glow), 0 0 60px var(--cyan-glow);
+      border: 2px solid rgba(245, 166, 35, 0.4);
+      transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+    .logo-img:hover {
+      transform: scale(1.06) rotate(-2deg);
+    }
+
+    .badge-strip {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.6rem;
+      margin-bottom: 1.25rem;
+    }
+    .badge {
+      background: rgba(22, 27, 34, 0.8);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(8px);
+      border-radius: 20px;
+      padding: 0.3rem 0.85rem;
+      font-size: 0.78rem;
+      font-family: var(--font-mono);
+      color: var(--text-bright);
+    }
+    .badge.gold {
+      border-color: rgba(245, 166, 35, 0.5);
+      color: var(--gold);
+      background: rgba(245, 166, 35, 0.08);
+    }
+    .badge.cyan {
+      border-color: rgba(0, 210, 255, 0.5);
+      color: var(--accent);
+      background: rgba(0, 210, 255, 0.08);
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--text-bright);
+      letter-spacing: -0.02em;
+      margin-bottom: 0.6rem;
+    }
+    .subtitle {
+      font-size: 1.05rem;
+      color: var(--muted);
+      max-width: 680px;
+      margin: 0 auto 1.5rem;
+    }
+    .heritage-box {
+      max-width: 760px;
+      margin: 0 auto;
+      background: rgba(21, 25, 33, 0.6);
+      border: 1px dashed var(--card-border);
+      border-radius: 8px;
+      padding: 0.85rem 1.25rem;
+      font-size: 0.84rem;
+      color: #94a3b8;
+      text-align: left;
+      line-height: 1.6;
+    }
+    .heritage-box strong { color: var(--gold); }
+
+    /* Layout & Cards */
+    main {
+      max-width: 1200px;
+      margin: 2.5rem auto 0;
+      padding: 0 1.25rem;
+    }
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .section-title::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--card-border);
+      margin-left: 0.5rem;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.4rem;
+      margin-bottom: 3rem;
+    }
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.4);
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-bottom: 0.35rem;
+    }
+    .card-meta {
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      color: var(--gold);
+      margin-bottom: 0.85rem;
+    }
+    .card-desc {
+      font-size: 0.92rem;
+      color: var(--text);
+      line-height: 1.5;
+    }
+    audio {
+      width: 100%;
+      height: 42px;
+      margin: 1.2rem 0 0.8rem;
+      border-radius: 6px;
+      outline: none;
+    }
+    .btn-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 0.6rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: #1c222d;
+      color: var(--text-bright);
+      border: 1px solid var(--card-border);
+      padding: 0.5rem 0.95rem;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn:hover {
+      background: #252d3c;
+      border-color: #4b5563;
+      transform: translateY(-1px);
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, #00b4db 0%, #0083b0 100%);
+      border-color: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+    }
+    .btn.primary:hover {
+      background: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+      box-shadow: 0 0 15px var(--cyan-glow);
+    }
+    .btn.gold {
+      background: linear-gradient(135deg, #d29922 0%, #b07d17 100%);
+      color: #0b0e14;
+      font-weight: 700;
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .btn.gold:hover {
+      background: linear-gradient(135deg, #f5a623 0%, #c68618 100%);
+      box-shadow: 0 0 15px var(--gold-glow);
+    }
+
+    /* Score Viewer Frame */
+    .viewer-container {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 1.25rem;
+      margin-bottom: 3rem;
+    }
+    .viewer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .viewer-title {
+      font-size: 1.2rem;
+      color: var(--text-bright);
+      font-weight: 700;
+    }
+    .viewer-frame {
+      width: 100%;
+      height: 720px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      background: #0f131a;
+    }
+
+    /* Parts Grid */
+    .parts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      gap: 0.85rem;
+    }
+    .part-item {
+      background: #181d26;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 0.85rem 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+      transition: border-color 0.15s;
+    }
+    .part-item:hover {
+      border-color: var(--accent);
+    }
+    .part-name {
+      color: var(--text-bright);
+      font-weight: 600;
+    }
+
+    footer {
+      border-top: 1px solid var(--card-border);
+      padding: 2.5rem 1rem;
+      text-align: center;
+      font-size: 0.88rem;
+      color: var(--muted);
+      margin-top: 4rem;
+      background: #080a0f;
+    }
+    footer a { color: var(--accent); text-decoration: none; font-weight: 600; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+
+  <header class="hero">
+    <div class="logo-container">
+      <img src="/app-icon.png" alt="CGMusicalComposition Emblem" class="logo-img">
+    </div>
+    <div class="badge-strip">
+      <span class="badge gold">🏛️ Wisconsin Rapids City Band (150+ Year Heritage)</span>
+      <span class="badge cyan">GNU LilyPond v2.24.4</span>
+      <span class="badge">FluidSynth 2.4.3 Acoustic Hall</span>
+      <span class="badge">11×17 Tabloid Geometry</span>
+      <span class="badge">CC BY 4.0 & MIT</span>
+    </div>
+    <h1>CGMusicalComposition</h1>
+    <p class="subtitle">Algorithmic Concert Band Engine, Precision Vector Score Engraving, and Spatialized Concert Hall DSP Synthesizer. Orchestrated by <strong>John Daniel Dondlinger</strong>.</p>
+    <div class="heritage-box">
+      <strong>Civic Band Tradition:</strong> Tracing roots to 1870s lumber boom civic brass musicians crossing the Wisconsin River between Centralia and Grand Rapids, Frank Bliss's <em>Bliss Band</em> (1905), and Emil Lambert's <em>Twin City Consolidated Band</em> (1915). Dedicated to the musicians, conductors, and community of the Wisconsin Rapids City Band (501(c)(3) nonprofit).
+    </div>
+  </header>
+
+  <main>
+    <!-- Spotlight & Jukebox -->
+    <div class="section-title">
+      <span>🎧 Master Repertoire Jukebox & High-Fidelity Streaming</span>
+    </div>
+
+    <div class="grid">
+      <!-- Moonlight Sonata (Concert Band Edition) -->
+      <div class="card" style="border-color: var(--gold);">
+        <div>
+          <div class="card-header">
+            <div class="card-title">Moonlight Sonata (Beethoven Op. 27 No. 2)</div>
+            <div class="card-meta">Key: C# minor | Adagio sostenuto (♩ = 54) | 60 Bars | Full Concert Band</div>
+            <div class="card-desc">Beethoven's sublime <em>Adagio sostenuto</em> authentically scored for 15-voice symphonic concert band. Features hypnotic legato woodwind triplets, noble singing French Horn and Flute leads, profound low brass organ pedal points, and subtle concert percussion.</div>
+          </div>
+          <audio controls preload="none">
+            <source src="/audio/moonlight_sonata.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+        <div class="btn-group">
+          <button class="btn primary" onclick="loadScore('/scores/moonlight_sonata_score.pdf', 'Moonlight Sonata — Tabloid Conductor Score')">🎼 View Score</button>
+          <a class="btn" href="/scores/moonlight_sonata_score.pdf" target="_blank">📄 Open PDF</a>
+          <a class="btn gold" href="/releases/Moonlight_Sonata_v1.0.0_ConcertBand_Score_and_Parts.zip" download>📦 Full Parts ZIP</a>
+        </div>
+      </div>
+
+      <!-- Moonlight Samba (Concert Band & Latin Percussion Edition) -->
+      <div class="card" style="border-color: var(--cyan);">
+        <div>
+          <div class="card-header">
+            <div class="card-title">Moonlight Samba (Beethoven Op. 27 No. 2)</div>
+            <div class="card-meta">Key: C# minor | Adagio con Samba e Bossa (♩ = 88) | 60 Bars | Full Band + Samba Battery</div>
+            <div class="card-desc">Beethoven's hypnotic Moonlight Sonata recast into an authentic Brazilian Samba and Bossa groove. Features solitary woodwind triplets (mm. 1-16), heavy Samba battery drop at m. 17 (Surdo, Caixa, Cowbell/Agogo, Cabasa), soaring French Horn lead medley, and pure acoustic resolution (mm. 49-60).</div>
+          </div>
+          <audio controls preload="none">
+            <source src="/audio/moonlight_samba.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+        <div class="btn-group">
+          <button class="btn primary" onclick="loadScore('/scores/moonlight_samba_score.pdf', 'Moonlight Samba — Tabloid Conductor Score')">🎼 View Score</button>
+          <a class="btn" href="/scores/moonlight_samba_score.pdf" target="_blank">📄 Open PDF</a>
+          <a class="btn gold" href="/releases/Moonlight_Samba_v1.0.0_ConcertBand_Score_and_Parts.zip" download>📦 Full Parts ZIP</a>
+        </div>
+      </div>
+
+      <!-- Still D.R.E. -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <div class="card-title">Still D.R.E. (Concert Band Edition)</div>
+            <div class="card-meta">Key: A minor | Tempo: 94 BPM | Scott Storch Piano Motif</div>
+            <div class="card-desc">West Coast G-Funk anthem translated to full symphonic wind band. Piano/mallet staccato chords, heavy tuba/bass trombone 808 pocket, and soaring trumpet brass hits.</div>
+          </div>
+          <audio controls preload="none">
+            <source src="/audio/still_dre.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+        <div class="btn-group">
+          <button class="btn primary" onclick="loadScore('/scores/still_dre_score.pdf', 'Still D.R.E. — Conductor Score')">🎼 View Score</button>
+          <a class="btn" href="/scores/still_dre_score.pdf" download>⬇️ Score PDF</a>
+        </div>
+      </div>
+
+      <!-- Sovereign Forge -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <div class="card-title">Sovereign Forge (Concert Overture)</div>
+            <div class="card-meta">Key: B♭ Major | Tempo: 112 BPM | Heroic Fanfare</div>
+            <div class="card-desc">Grand heroic brass and percussion overture with driving timpani and antiphonal horn calls. Formatted for Tabloid 11×17 podium readability.</div>
+          </div>
+          <audio controls preload="none">
+            <source src="/audio/sovereign_forge.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+        <div class="btn-group">
+          <button class="btn primary" onclick="loadScore('/scores/sovereign_forge_score.pdf', 'Sovereign Forge — Conductor Score')">🎼 View Score</button>
+          <a class="btn" href="/scores/sovereign_forge_score.pdf" download>⬇️ Score PDF</a>
+        </div>
+      </div>
+
+      <!-- A Soix Medley -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <div class="card-title">A Soix Medley</div>
+            <div class="card-meta">6-Movement Suite | Varied Tempos | 3/4 Solo Toms Overture</div>
+            <div class="card-desc">Expansive concert band suite traveling through E♭ Major, C minor, D minor, and B♭ Major with intricate percussion and woodwind filigree.</div>
+          </div>
+          <audio controls preload="none">
+            <source src="/audio/a_soix_medley.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+        <div class="btn-group">
+          <a class="btn" href="https://github.com/yavru421/cgmusicalcomp" target="_blank">View Repo</a>
+        </div>
+      </div>
+
+      <!-- Instrument Showcase -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <div class="card-title">Instrument Showcase & Benchmark (Narrated)</div>
+            <div class="card-meta">Key: B♭ Major | Tempo: 100 BPM | Neural Voice Intros</div>
+            <div class="card-desc">Step-by-step introduction of all 14 concert band voices: Flute, Oboe, Clarinet, Alto/Tenor Sax, Horn, Trumpet, Trombone, Euphonium, Tuba, Mallets, Timpani, and Tutti finale.</div>
+          </div>
+          <audio controls preload="none">
+            <source src="/audio/showcase_narrated.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+        <div class="btn-group">
+          <a class="btn" href="https://github.com/yavru421/cgmusicalcomp" target="_blank">View Benchmark</a>
+        </div>
+      </div>
+
+      <!-- Caribbean Pirate Reel -->
+      <div class="card">
+        <div>
+          <div class="card-header">
+            <div class="card-title">The Buccaneer's Reel & Island Horizon</div>
+            <div class="card-meta">Meter: 6/8 | Tempo: 112 BPM (dotted quarter) | Maritime Groove</div>
+            <div class="card-desc">Swashbuckling sea-shanty rhythm section with accordion-like reed counterpoint and energetic brass punctuation.</div>
+          </div>
+          <audio controls preload="none">
+            <source src="/audio/pirate_caribbean.mp3" type="audio/mpeg">
+            Your browser does not support the audio element.
+          </audio>
+        </div>
+        <div class="btn-group">
+          <a class="btn" href="https://github.com/yavru421/cgmusicalcomp" target="_blank">View Details</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Integrated Interactive PDF Score Viewer (On-Demand Lazy Loading) -->
+    <div class="viewer-container" id="score-viewer-section">
+      <div class="viewer-header">
+        <div class="viewer-title" id="active-score-title">🎼 Live Score Viewer (Select a score below to preview)</div>
+        <div class="btn-group">
+          <button class="btn" onclick="loadScore('/scores/moonlight_sonata_score.pdf', 'Moonlight Sonata (Tabloid Conductor Score)')">Moonlight Sonata</button>
+          <button class="btn" onclick="loadScore('/scores/moonlight_samba_score.pdf', 'Moonlight Samba (Tabloid Conductor Score)')">Moonlight Samba</button>
+          <button class="btn" onclick="loadScore('/scores/still_dre_score.pdf', 'Still D.R.E. (Conductor Score)')">Still D.R.E.</button>
+          <button class="btn" onclick="loadScore('/scores/sovereign_forge_score.pdf', 'Sovereign Forge (Conductor Score)')">Sovereign Forge</button>
+          <a class="btn primary" id="open-full-pdf" href="#" target="_blank" style="display:none;">↗️ Fullscreen PDF</a>
+        </div>
+      </div>
+      <div id="viewer-placeholder" style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:320px; border:1px dashed var(--card-border); border-radius:8px; color:var(--muted); text-align:center; padding:2rem;">
+        <span style="font-size:2.4rem; margin-bottom:0.75rem;">🎼</span>
+        <p style="font-size:1.05rem; font-weight:600; color:var(--text-bright); margin-bottom:0.35rem;">Score Viewer Standby</p>
+        <p style="font-size:0.88rem; max-width:460px; margin-bottom:1.2rem;">PDF scores load on-demand when clicked. No files are downloaded automatically on page load or refresh.</p>
+        <button class="btn primary" onclick="loadScore('/scores/moonlight_sonata_score.pdf', 'Moonlight Sonata (Tabloid Conductor Score)')">Load Moonlight Sonata Score</button>
+      </div>
+      <iframe class="viewer-frame" id="pdf-frame" src="about:blank" style="display:none;"></iframe>
+    </div>
+
+    <!-- Individual Musician Parts Section (Moonlight Sonata) -->
+    <div class="section-title">
+      <span>🎺 Moonlight Sonata: 15 Individual Musician Parts (Print-Ready Transposed PDFs)</span>
+    </div>
+    <div class="parts-grid">
+      <div class="part-item"><span class="part-name">Flute (C)</span><a class="btn" href="/parts/moonlight_sonata_part_flute.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">Oboe (C)</span><a class="btn" href="/parts/moonlight_sonata_part_oboe.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">B♭ Clarinet</span><a class="btn" href="/parts/moonlight_sonata_part_clarinet.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">E♭ Alto Saxophone</span><a class="btn" href="/parts/moonlight_sonata_part_altosax.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">B♭ Tenor Saxophone</span><a class="btn" href="/parts/moonlight_sonata_part_tenorsax.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">B♭ Trumpet</span><a class="btn" href="/parts/moonlight_sonata_part_trumpet.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">Horn in F</span><a class="btn" href="/parts/moonlight_sonata_part_horn.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">Tenor Trombone</span><a class="btn" href="/parts/moonlight_sonata_part_trombone.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">Euphonium B.C.</span><a class="btn" href="/parts/moonlight_sonata_part_euphonium.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">BB♭ Tuba</span><a class="btn" href="/parts/moonlight_sonata_part_tuba.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">Acoustic / Electric Bass</span><a class="btn" href="/parts/moonlight_sonata_part_bass.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">Glockenspiel</span><a class="btn" href="/parts/moonlight_sonata_part_glockenspiel.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">Marimba</span><a class="btn" href="/parts/moonlight_sonata_part_marimba.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">Timpani (Cis & Gis)</span><a class="btn" href="/parts/moonlight_sonata_part_timpani.pdf" download>PDF</a></div>
+      <div class="part-item"><span class="part-name">Concert Percussion</span><a class="btn" href="/parts/moonlight_sonata_part_percussion.pdf" download>PDF</a></div>
+    </div>
+  </main>
+
+  <footer>
+    <p><strong>CGMusicalComposition</strong> &bull; Developed and Orchestrated by <strong>John Daniel Dondlinger</strong></p>
+    <p>Music engraved with GNU LilyPond v2.24.4 under Creative Commons Attribution 4.0 International (CC BY 4.0). Code under MIT License.</p>
+    <p><a href="https://github.com/yavru421/cgmusicalcomp" target="_blank">GitHub Repository (yavru421/cgmusicalcomp)</a> &bull; <a href="https://dondlingergc.com" target="_blank">Dondlinger General Contracting</a></p>
+  </footer>
+
+  <script>
+    function loadScore(pdfUrl, title) {
+      var placeholder = document.getElementById('viewer-placeholder');
+      var frame = document.getElementById('pdf-frame');
+      if (placeholder) placeholder.style.display = 'none';
+      if (frame) {
+        frame.style.display = 'block';
+        frame.src = pdfUrl + '#toolbar=1&navpanes=0';
+      }
+      document.getElementById('active-score-title').textContent = '🎼 Live Score Viewer: ' + title;
+      var fullPdfBtn = document.getElementById('open-full-pdf');
+      if (fullPdfBtn) {
+        fullPdfBtn.href = pdfUrl;
+        fullPdfBtn.style.display = 'inline-flex';
+      }
+      document.getElementById('score-viewer-section').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW registration error:', err));
+      });
+    }
+  </script>
+</body>
+</html>

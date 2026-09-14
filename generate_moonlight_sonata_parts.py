@@ -1,0 +1,168 @@
+#!/usr/bin/env python3
+import os
+
+PARTS_DIR = os.path.join(r"C:\dev\CGMusicalComposition", "Parts")
+os.makedirs(PARTS_DIR, exist_ok=True)
+
+PARTS_CONFIG = [
+    {
+        "file": "moonlight_sonata_part_flute.ly",
+        "name": "Flute",
+        "short": "Fl.",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_flute.ily",
+        "notes_call": "\\fluteNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_oboe.ly",
+        "name": "Oboe",
+        "short": "Ob.",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_oboe.ily",
+        "notes_call": "\\oboeNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_clarinet.ly",
+        "name": "B♭ Clarinet",
+        "short": "Cl.",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_clarinet.ily",
+        "notes_call": "\\transpose bes c' \\clarinetNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_altosax.ly",
+        "name": "Alto Saxophone",
+        "short": "A.Sax",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_altosax.ily",
+        "notes_call": "\\transpose ees c' \\altoSaxNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_tenorsax.ly",
+        "name": "Tenor Saxophone",
+        "short": "T.Sax",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_tenorsax.ily",
+        "notes_call": "\\transpose bes c \\tenorSaxNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_trumpet.ly",
+        "name": "B♭ Trumpet",
+        "short": "Tpt.",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_trumpet.ily",
+        "notes_call": "\\transpose bes c' \\trumpetNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_horn.ly",
+        "name": "Horn in F",
+        "short": "Hn.",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_horn.ily",
+        "notes_call": "\\transpose f c' \\hornNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_trombone.ly",
+        "name": "Trombone",
+        "short": "Tbn.",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_trombone.ily",
+        "notes_call": "\\tromboneNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_euphonium.ly",
+        "name": "Euphonium",
+        "short": "Euph.",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_euphonium.ily",
+        "notes_call": "\\euphoniumNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_tuba.ly",
+        "name": "Tuba",
+        "short": "Tba.",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_tuba.ily",
+        "notes_call": "\\tubaNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_bass.ly",
+        "name": "Acoustic / Electric Bass",
+        "short": "Bs.",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_bass.ily",
+        "notes_call": "\\bassNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_glockenspiel.ly",
+        "name": "Glockenspiel",
+        "short": "Glock.",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_glockenspiel.ily",
+        "notes_call": "\\glockenspielNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_marimba.ly",
+        "name": "Marimba",
+        "short": "Mba.",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_marimba.ily",
+        "notes_call": "\\marimbaNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_timpani.ly",
+        "name": "Timpani",
+        "short": "Timp.",
+        "staff": "Staff",
+        "notes_file": "moonlight_sonata_timpani.ily",
+        "notes_call": "\\timpaniNotes",
+    },
+    {
+        "file": "moonlight_sonata_part_percussion.ly",
+        "name": "Concert Percussion",
+        "short": "Perc.",
+        "staff": "DrumStaff",
+        "notes_file": "moonlight_sonata_percussion.ily",
+        "notes_call": "\\percussionNotes",
+    },
+]
+
+TEMPLATE = """\\version "2.24.0"
+
+\\include "../Global/global_settings.ily"
+\\include "../Global/moonlight_sonata_global.ily"
+\\include "../Notes/{notes_file}"
+
+#(set-global-staff-size 18)
+
+\\header {{
+  title = "Moonlight Sonata"
+  subtitle = "Sonata quasi una Fantasia, Op. 27, No. 2 — I. Adagio sostenuto"
+  composer = "Ludwig van Beethoven"
+  arranger = "Arr. John Daniel Dondlinger"
+  instrument = "{name}"
+  tagline = "Moonlight Sonata — {name} — Wisconsin Rapids City Band"
+}}
+
+\\score {{
+  \\new {staff} \\with {{
+    instrumentName = #"{name}"
+    shortInstrumentName = #"{short}"
+  }} {{
+    \\compressMMRests <<
+      \\moonlightSonataGlobal
+      {notes_call}
+    >>
+  }}
+  \\layout {{ }}
+}}
+"""
+
+for cfg in PARTS_CONFIG:
+    path = os.path.join(PARTS_DIR, cfg["file"])
+    content = TEMPLATE.format(**cfg)
+    with open(path, "w", encoding="utf-8") as f:
+        f.write(content)
+    print(f"Generated: {cfg['file']}")
+
+print("All 15 Moonlight Sonata parts successfully generated!")

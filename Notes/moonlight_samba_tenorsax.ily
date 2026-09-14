@@ -51,8 +51,8 @@ tenorSaxNotes = \fixed c' {
 
   % Part VII: Section F — Building Back to Grand Tutti Climax (mm. 45-56)
   R1 * 4 |
-  e8\ff fis gis a b cis' dis' e' |
-  fis'4. e'8 dis'4 cis' |
+  e8\ff fis gis a b cis' dis' cis' |
+  dis'4. cis'8 b4 a |
   gis8\fff r gis r gis4 gis8 gis |
   a8 r a r a4 a8 a |
   b8 r b r b4 b8 b |

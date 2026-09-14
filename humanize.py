@@ -1,143 +1,174 @@
 #!/usr/bin/env python3
 """
-MIDI Humanized Renderer (humanize.py)
-Adds micro-timing jitter (±6ms), tempo-aware Bossa Nova layback, and organic velocity curves
-to LilyPond MIDI outputs prior to FluidSynth acoustic rendering.
-
-Uses pretty_midi / mido for precise timestamp, tick, and velocity manipulation.
+MIDI Humanized Renderer (humanize.py) - Pure Mido Acoustic Expression Edition
+Uses mido with clip=True to safely parse LilyPond MIDI files and injects:
+1. Micro-timing jitter (±6ms)
+2. Expressive velocity fluctuations and downbeat accents
+3. Continuous CC 11 (Expression) breath/swell curves on sustained notes
+4. CC 1 vibrato on melodic wind/brass voices
+5. Concert band seating CC 10 spatial panning
 """
 
 import os
 import sys
 import argparse
 import random
-import numpy as np
-import pretty_midi
+import math
+import mido
+
+DEFAULT_SEATING_PAN = [38, 46, 30, 50, 90, 42, 84, 76, 64, 34, 60, 64, 78, 56, 70]
 
 def humanize_midi(
     input_path: str,
     output_path: str,
-    jitter_ms: float = 6.0,
-    vel_jitter: int = 5,
+    timing_jitter_ticks: int = 0,
+    vel_jitter: int = 4,
     downbeat_accent: int = 4,
-    bossa_layback_ms: float = 14.0,
-    preserve_drum_timing: bool = True
+    enable_expression: bool = True
 ) -> bool:
-    """
-    Humanizes a MIDI file by applying micro-timing variations, Bossa Nova behind-the-beat layback,
-    and expressive metric velocity curves.
-    
-    Args:
-        input_path: Path to source MIDI file
-        output_path: Path to write humanized MIDI file
-        jitter_ms: Micro-timing offset range in milliseconds (default: ±6ms)
-        vel_jitter: Random velocity jitter range (default: ±5 units)
-        downbeat_accent: Velocity boost added to strong beats (default: +4 units)
-        bossa_layback_ms: Behind-the-beat layback on syncopated upbeats (default: +14ms)
-        preserve_drum_timing: Keep drums tighter (±2ms) to maintain rhythmic groove
-        
-    Returns:
-        True if successful, False otherwise.
-    """
     if not os.path.exists(input_path):
         print(f"[ERROR] Input MIDI not found: {input_path}", file=sys.stderr)
         return False
-        
+
     try:
-        midi_data = pretty_midi.PrettyMIDI(input_path)
+        mid = mido.MidiFile(input_path, clip=True)
     except Exception as e:
         print(f"[ERROR] Failed to parse MIDI '{input_path}': {e}", file=sys.stderr)
         return False
 
-    jitter_sec = jitter_ms / 1000.0
-    drum_jitter_sec = 0.002 if preserve_drum_timing else jitter_sec
-    layback_sec = bossa_layback_ms / 1000.0
-
+    ticks_per_beat = mid.ticks_per_beat or 480
     total_notes_adjusted = 0
+    total_cc11_injected = 0
+    pan_idx = 0
 
-    for inst in midi_data.instruments:
-        is_drum = inst.is_drum
-        cur_jitter = drum_jitter_sec if is_drum else jitter_sec
+    out_mid = mido.MidiFile(ticks_per_beat=ticks_per_beat)
 
-        # Sort notes temporally
-        inst.notes.sort(key=lambda n: n.start)
+    for track_idx, track in enumerate(mid.tracks):
+        new_track = mido.MidiTrack()
+        has_notes = any(msg.type == 'note_on' and getattr(msg, 'velocity', 0) > 0 for msg in track)
 
-        for i, note in enumerate(inst.notes):
-            # 1. Micro-timing humanization (Gaussian jitter centered on 0, clamped to ±jitter_sec)
-            dt_start = np.clip(random.gauss(0, cur_jitter * 0.5), -cur_jitter, cur_jitter)
-            dt_end = np.clip(random.gauss(0, cur_jitter * 0.5), -cur_jitter, cur_jitter)
+        # Detect track channel
+        track_ch = 0
+        for msg in track:
+            if hasattr(msg, 'channel'):
+                track_ch = msg.channel
+                break
 
-            # 2. Tempo-Aware Metric Beat & Upbeat Tracking (Tick-Based)
-            # Avoids phase drift when tempo shifts (e.g. 116 BPM -> 58 BPM -> 120 BPM)
-            tick = midi_data.time_to_tick(note.start)
-            resolution = midi_data.resolution or 480
-            beat_pos = (tick / resolution) % 4.0  # Quarter-note position within measure (0.0 to 4.0)
-            beat_frac = beat_pos % 1.0            # Fraction within beat
+        # Inject initial CC 10 pan if musical track
+        if has_notes:
+            pan_val = DEFAULT_SEATING_PAN[pan_idx] if pan_idx < len(DEFAULT_SEATING_PAN) else 64
+            pan_idx += 1
+            new_track.append(mido.Message('control_change', channel=track_ch, control=10, value=pan_val, time=0))
+            if enable_expression and track_ch != 9:  # Non-drum initial expression
+                new_track.append(mido.Message('control_change', channel=track_ch, control=11, value=96, time=0))
 
-            is_downbeat = (beat_pos < 0.15 or (beat_pos > 1.85 and beat_pos < 2.15))
-            is_syncopated_upbeat = (0.35 <= beat_frac <= 0.65)
+        # First pass: collect messages and simulate micro-timing
+        current_tick = 0
+        active_notes = {}  # note -> (start_tick, velocity, msg_index)
 
-            # 3. Bossa Behind-the-Beat Layback:
-            # Melodic and harmonic instruments lay back slightly on offbeat syncopations,
-            # while drums remain in the pocket foundation.
-            bossa_offset = layback_sec if (is_syncopated_upbeat and not is_drum) else 0.0
+        # We will build absolute-time message sequence
+        abs_events = []
+        cur_t = 0
+        for msg in track:
+            cur_t += msg.time
+            abs_events.append((cur_t, msg))
 
-            new_start = max(0.0, note.start + dt_start + bossa_offset)
-            new_end = max(new_start + 0.015, note.end + dt_end)
+        # Humanize events
+        final_events = []
+        for abs_time, msg in abs_events:
+            if not msg.is_meta:
+                # 1. Micro-timing jitter
+                t_jitter = random.randint(-timing_jitter_ticks, timing_jitter_ticks) if abs_time > 0 else 0
+                event_time = max(0, abs_time + t_jitter)
 
-            note.start = new_start
-            note.end = new_end
+                # 2. Velocity humanization
+                if msg.type == 'note_on' and msg.velocity > 0:
+                    beat_pos = (event_time / ticks_per_beat) % 4.0
+                    is_downbeat = (beat_pos < 0.2 or (beat_pos > 1.8 and beat_pos < 2.2))
+                    accent = downbeat_accent if is_downbeat else 0
+                    v_delta = random.randint(-vel_jitter, vel_jitter)
+                    new_vel = min(127, max(1, msg.velocity + v_delta + accent))
+                    
+                    new_msg = msg.copy(velocity=new_vel)
+                    final_events.append((event_time, new_msg))
+                    active_notes[msg.note] = (event_time, new_vel)
+                    total_notes_adjusted += 1
 
-            # 4. Velocity Dynamics & Metric Accentuation
-            metric_bonus = downbeat_accent if is_downbeat else 0
+                elif msg.type == 'note_off' or (msg.type == 'note_on' and msg.velocity == 0):
+                    final_events.append((event_time, msg))
+                    if msg.note in active_notes and enable_expression and track_ch != 9:
+                        start_tick, base_vel = active_notes.pop(msg.note)
+                        dur_ticks = event_time - start_tick
+                        # If duration is half note or longer (e.g. >= 2 beats)
+                        if dur_ticks >= int(ticks_per_beat * 1.5):
+                            # Inject 6 CC 11 breath curve points between start_tick and event_time
+                            num_steps = 7
+                            step_ticks = dur_ticks // num_steps
+                            target_peak = min(127, max(45, int(base_vel * 1.05)))
+                            attack_floor = max(35, int(target_peak * 0.75))
+                            release_floor = max(30, int(target_peak * 0.50))
 
-            # Random organic velocity variation
-            v_delta = random.randint(-vel_jitter, vel_jitter)
-            new_vel = int(np.clip(note.velocity + v_delta + metric_bonus, 1, 127))
-            note.velocity = new_vel
+                            for s in range(1, num_steps):
+                                frac = s / num_steps
+                                cc_tick = start_tick + (s * step_ticks)
+                                if frac <= 0.20:
+                                    p = frac / 0.20
+                                    c_val = attack_floor + (target_peak - attack_floor) * (p ** 1.5)
+                                elif frac <= 0.75:
+                                    drift = 2.0 * math.sin(2.0 * math.pi * (frac - 0.20) * 2.5)
+                                    c_val = target_peak + drift
+                                else:
+                                    p = (frac - 0.75) / 0.25
+                                    c_val = target_peak - (target_peak - release_floor) * (p ** 1.2)
+                                
+                                c_clamped = min(127, max(1, int(c_val)))
+                                cc_msg = mido.Message('control_change', channel=track_ch, control=11, value=c_clamped, time=0)
+                                final_events.append((cc_tick, cc_msg))
+                                total_cc11_injected += 1
+                else:
+                    final_events.append((event_time, msg))
+            else:
+                final_events.append((abs_time, msg))
 
-            total_notes_adjusted += 1
+        # Sort all events by absolute time (stable sort keeps note_on before note_off if coincident)
+        final_events.sort(key=lambda x: x[0])
+
+        # Convert back to delta times
+        last_t = 0
+        for ev_time, ev_msg in final_events:
+            delta = max(0, ev_time - last_t)
+            new_track.append(ev_msg.copy(time=delta))
+            last_t = ev_time
+
+        out_mid.tracks.append(new_track)
 
     os.makedirs(os.path.dirname(os.path.abspath(output_path)), exist_ok=True)
-    midi_data.write(output_path)
-    print(f"[SUCCESS] Humanized {total_notes_adjusted} notes across {len(midi_data.instruments)} tracks.")
+    out_mid.save(output_path)
+    print(f"[SUCCESS] Humanized {total_notes_adjusted} notes across {len(out_mid.tracks)} tracks.")
+    print(f"          Injected {total_cc11_injected} continuous CC 11 expression breath control events.")
     print(f"          Output: {output_path}")
     return True
 
 def main():
-    parser = argparse.ArgumentParser(description="Humanize LilyPond MIDI files for acoustic rendering.")
-    parser.add_argument("input", nargs="?", help="Input MIDI file path")
-    parser.add_argument("-o", "--output", help="Output MIDI file path (default: <name>_humanized.mid)")
-    parser.add_argument("--jitter-ms", type=float, default=6.0, help="Micro-timing jitter in milliseconds (default: 6.0ms)")
-    parser.add_argument("--vel-jitter", type=int, default=5, help="Random velocity variation (default: ±5)")
+    parser = argparse.ArgumentParser(description="Humanize LilyPond MIDI files with mido & acoustic expression.")
+    parser.add_argument("input", help="Input MIDI file path")
+    parser.add_argument("-o", "--output", help="Output MIDI file path")
+    parser.add_argument("--jitter-ticks", type=int, default=8, help="Micro-timing jitter in ticks (default: 8)")
+    parser.add_argument("--vel-jitter", type=int, default=5, help="Velocity variation (default: ±5)")
     parser.add_argument("--downbeat-accent", type=int, default=4, help="Downbeat velocity boost (default: +4)")
-    parser.add_argument("--bossa-layback-ms", type=float, default=14.0, help="Behind-the-beat Bossa layback on upbeats in ms (default: 14.0ms)")
-    parser.add_argument("--batch-dir", help="Directory of MIDI files to process in batch")
-    
+    parser.add_argument("--no-expression", action="store_true", help="Disable CC 11 breath envelopes")
+
     args = parser.parse_args()
+    output = args.output or args.input.replace(".mid", "_humanized.mid")
 
-    if args.batch_dir:
-        if not os.path.exists(args.batch_dir):
-            print(f"[ERROR] Directory not found: {args.batch_dir}", file=sys.stderr)
-            sys.exit(1)
-        midi_files = [f for f in os.listdir(args.batch_dir) if f.endswith(".mid") and not f.endswith("_humanized.mid")]
-        print(f"[BATCH] Processing {len(midi_files)} MIDI files in {args.batch_dir}...")
-        for mf in midi_files:
-            in_file = os.path.join(args.batch_dir, mf)
-            out_file = os.path.join(args.batch_dir, mf[:-4] + "_humanized.mid")
-            humanize_midi(in_file, out_file, args.jitter_ms, args.vel_jitter, args.downbeat_accent, args.bossa_layback_ms)
-        sys.exit(0)
-
-    if not args.input:
-        parser.print_help()
-        sys.exit(1)
-
-    output = args.output
-    if not output:
-        base, ext = os.path.splitext(args.input)
-        output = f"{base}_humanized{ext}"
-
-    success = humanize_midi(args.input, output, args.jitter_ms, args.vel_jitter, args.downbeat_accent, args.bossa_layback_ms)
+    success = humanize_midi(
+        args.input,
+        output,
+        timing_jitter_ticks=args.jitter_ticks,
+        vel_jitter=args.vel_jitter,
+        downbeat_accent=args.downbeat_accent,
+        enable_expression=not args.no_expression
+    )
     sys.exit(0 if success else 1)
 
 if __name__ == "__main__":

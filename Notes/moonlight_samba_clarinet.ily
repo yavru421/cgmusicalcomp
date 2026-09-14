@@ -29,12 +29,12 @@ clarinetNotes = \fixed c' {
   gis16 bis fis'8 gis16 bis e'8 gis16 bis dis'8 r4\fermata |
 
   % Part III: Section B — Woodwinds & Saxophone Medley (mm. 17-24) -> STOP 3
-  cis'16\ff dis' e' fis' gis'8 cis' cis'16 dis' e' fis' gis'8 cis' |
-  d'16 e' fis' g' a'8 d' d'16 e' fis' g' a'8 d' |
-  gis16 bis dis' fis' gis'8 bis fis'16 dis' bis gis dis'8 gis |
+  cis'16\ff dis' e' fis' e'8 cis' cis'16 dis' e' fis' e'8 cis' |
+  d'16 e' fis' g' fis'8 d' d'16 e' fis' g' fis'8 d' |
+  gis16 bis dis' fis' dis'8 bis fis'16 dis' bis gis dis'8 gis |
   cis'2. r4 |
-  r8 cis'16 e' gis'8 cis'16 e' gis'8 cis'16 e' gis'8 cis' |
-  r8 d'16 fis' a'8 d'16 fis' a'8 d'16 fis' a'8 d' |
+  r8 cis'16 e' e'8 cis'16 e' e'8 cis'16 e' e'8 cis' |
+  r8 d'16 fis' d'8 d'16 fis' d'8 d'16 fis' d'8 d' |
   r8 bis16 dis' fis'8 bis16 dis' fis'8 bis16 dis' fis'8 bis |
   cis'2. r4\fermata |
 
@@ -63,8 +63,8 @@ clarinetNotes = \fixed c' {
   r8 a16 cis' e'8 a16 cis' e'8 a16 d' fis'8 a |
   r8 gis16 bis fis'8 gis16 bis e'8 gis16 bis dis'8 gis |
   r8 gis16 bis fis'8 gis16 bis e'8 gis16 bis dis'8 gis |
-  cis'16 dis' e' fis' gis'8 cis' cis'16 dis' e' fis' gis'8 cis' |
-  d'16 e' fis' g' a'8 d' d'16 e' fis' g' a'8 d' |
+  cis'16 dis' e' fis' e'8 cis' cis'16 dis' e' fis' e'8 cis' |
+  d'16 e' fis' g' fis'8 d' d'16 e' fis' g' fis'8 d' |
   cis'8\fff r cis' r cis'4 cis'8 cis' |
   d'8 r d' r d'4 d'8 d' |
   bis8 r bis r bis4 bis8 bis |

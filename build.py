@@ -149,18 +149,11 @@ def build_score(piece_name: str = "moonlight_samba", skip_audio: bool = False):
         audit_res = subprocess.run(cmd_audit, capture_output=True, text=True, cwd=WORKDIR)
         print(audit_res.stdout)
         if audit_res.returncode != 0:
-            print(f"[WARN] Physical playability breaches detected. Executing auto-correction pass...", file=sys.stderr)
-            corrected_mid = f"{out_prefix}_ergonomic.mid"
-            cmd_fix = [PYTHON_EXE, VALIDATE_PY, raw_mid, "--auto-correct", "-o", corrected_mid]
-            fix_res = subprocess.run(cmd_fix, capture_output=True, text=True, cwd=WORKDIR)
-            print(fix_res.stdout)
-            if os.path.exists(corrected_mid):
-                raw_mid = corrected_mid
-                print(f"[AUDIT] Gated & corrected MIDI staged for humanization: {os.path.basename(raw_mid)}")
+            print(f"[WARN] Physical playability advisory issued. Preserving original composer notes intact.", file=sys.stderr)
 
-    # 2. Humanize MIDI Timing & Dynamics
+    # 2. Humanize MIDI Timing & Dynamics (Zero timing jitter, velocity & expression only)
     if os.path.exists(HUMANIZE_PY):
-        cmd = [PYTHON_EXE, HUMANIZE_PY, raw_mid, "-o", human_mid, "--jitter-ms", "6.0", "--vel-jitter", "5"]
+        cmd = [PYTHON_EXE, HUMANIZE_PY, raw_mid, "-o", human_mid, "--jitter-ticks", "0", "--vel-jitter", "3"]
         subprocess.run(cmd, capture_output=True, text=True, cwd=WORKDIR, timeout=60)
     target_mid = human_mid if os.path.exists(human_mid) else raw_mid
 

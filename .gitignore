@@ -1,8 +1,15 @@
 # Scratch directories
 scratch_showcase/
+scratch_binaural/
 scratch/
 *.tmp
 *.log
+
+# Python & Build artifacts
+__pycache__/
+*.pyc
+*.exp
+*.lib
 
 # OS generated files
 Thumbs.db
@@ -15,6 +22,7 @@ $RECYCLE.BIN/
 out_*.wav
 temp_*.wav
 
-# IDE
+# IDE & Cloudflare
 .vscode/
 .idea/
+.wrangler/

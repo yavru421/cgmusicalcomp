@@ -54,6 +54,12 @@ VOICE_RANGES: Dict[str, Dict] = {
         "is_wind": True,
         "name": "Alto Saxophone"
     },
+    "tenor sax": {
+        "min": 44,  # Ab2 (Concert) -> Written Bb3
+        "max": 72,  # C5 (Concert) -> Written D6
+        "is_wind": True,
+        "name": "Tenor Saxophone"
+    },
     "saxophone": {
         "min": 60,  # C4
         "max": 77,  # F5
@@ -216,7 +222,7 @@ class ErgonomicAuditReport:
 
 def audit_midi_file(mid_path: str) -> ErgonomicAuditReport:
     report = ErgonomicAuditReport(mid_path)
-    mid = mido.MidiFile(mid_path)
+    mid = mido.MidiFile(mid_path, clip=True)
     ticks_per_beat = mid.ticks_per_beat or 480
     
     # Estimate time signature & ticks per bar (default 4/4 = 4 beats per bar)
@@ -244,13 +250,15 @@ def audit_midi_file(mid_path: str) -> ErgonomicAuditReport:
                         match = ("oboe", VOICE_RANGES["oboe"])
                     elif prog == 71:  # Clarinet
                         match = ("clarinet", VOICE_RANGES["clarinet"])
-                    elif prog in [65, 66]:  # Alto / Tenor Sax
+                    elif prog == 65:  # Alto Sax
                         match = ("alto sax", VOICE_RANGES["alto sax"])
-                    elif prog in [56, 57]:  # Trumpet
+                    elif prog == 66:  # Tenor Sax
+                        match = ("tenor sax", VOICE_RANGES["tenor sax"])
+                    elif prog == 56:  # Trumpet
                         match = ("trumpet", VOICE_RANGES["trumpet"])
                     elif prog == 60:  # French Horn
                         match = ("french horn", VOICE_RANGES["french horn"])
-                    elif prog in [57, 58]:  # Trombone
+                    elif prog == 57:  # Trombone / Euphonium
                         match = ("trombone", VOICE_RANGES["trombone"])
                     elif prog == 58:  # Tuba
                         match = ("tuba", VOICE_RANGES["tuba"])

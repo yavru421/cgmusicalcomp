@@ -7,7 +7,7 @@
 % 5 Stops / Sectional Medley Support / Percussion Soli Breakout
 % ============================================================================
 
-timpaniNotes = \fixed c' {
+timpaniNotes = \fixed c {
   \clef bass
 
   % Part I: Percussion Start & Groove Build (mm. 1-8) -> STOP 1 at m. 8

@@ -6,7 +6,7 @@
 % Range strictly verified within [Bb3 - F5 / MIDI 58-77]
 % ============================================================================
 
-hornNotes = \fixed c' {
+hornNotes = \fixed c {
   \clef treble
 
   % Part I: Percussion Start (mm. 1-4 tacet) -> Enters m. 5 -> STOP 1

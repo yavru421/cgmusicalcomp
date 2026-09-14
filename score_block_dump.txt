@@ -1,0 +1,104 @@
+\score {
+  <<
+    \new StaffGroup = "Woodwinds" <<
+      \new Staff \with {
+        instrumentName = "Flute"
+        shortInstrumentName = "Fl."
+        midiInstrument = #"flute"
+      } { \flutePart }
+
+      \new Staff \with {
+        instrumentName = "Oboe"
+        shortInstrumentName = "Ob."
+        midiInstrument = #"oboe"
+      } { \oboePart }
+
+      \new Staff \with {
+        instrumentName = "B♭ Clarinet"
+        shortInstrumentName = "Cl."
+        midiInstrument = #"clarinet"
+      } { \clarinetPart }
+
+      \new Staff \with {
+        instrumentName = "Alto Sax"
+        shortInstrumentName = "A.Sax"
+        midiInstrument = #"alto sax"
+      } { \altoSaxPart }
+    >>
+
+    \new StaffGroup = "Brass" <<
+      \new Staff \with {
+        instrumentName = "B♭ Trumpet"
+        shortInstrumentName = "Tpt."
+        midiInstrument = #"trumpet"
+      } { \trumpetPart }
+
+      \new Staff \with {
+        instrumentName = "Horn in F"
+        shortInstrumentName = "Hn."
+        midiInstrument = #"french horn"
+      } { \hornPart }
+
+      \new Staff \with {
+        instrumentName = "Trombone"
+        shortInstrumentName = "Tbn."
+        midiInstrument = #"trombone"
+      } { \trombonePart }
+
+      \new Staff \with {
+        instrumentName = "Tuba"
+        shortInstrumentName = "Tub."
+        midiInstrument = #"tuba"
+      } { \tubaPart }
+    >>
+
+    \new StaffGroup = "StringsBass" <<
+      \new Staff \with {
+        instrumentName = "Electric Bass"
+        shortInstrumentName = "E.Bass"
+        midiInstrument = #"electric bass (finger)"
+      } { \electricBassPart }
+
+      \new Staff \with {
+        instrumentName = "Cello"
+        shortInstrumentName = "Vc."
+        midiInstrument = #"cello"
+      } { \celloPart }
+    >>
+
+    \new StaffGroup = "PitchedPercussion" <<
+      \new Staff \with {
+        instrumentName = "Glockenspiel"
+        shortInstrumentName = "Glock."
+        midiInstrument = #"glockenspiel"
+      } { \glockPart }
+
+      \new Staff \with {
+        instrumentName = "Marimba"
+        shortInstrumentName = "Mar."
+        midiInstrument = #"marimba"
+      } { \marimbaPart }
+
+      \new Staff \with {
+        instrumentName = "Timpani"
+        shortInstrumentName = "Timp."
+        midiInstrument = #"timpani"
+      } { \timpaniPart }
+    >>
+
+    \new DrumStaff \with {
+      instrumentName = "Percussion"
+      shortInstrumentName = "Perc."
+      midiInstrument = #"standard kit"
+    } { \percussionPart }
+  >>
+
+  \layout {
+    \context {
+      \Staff
+      \consists "Measure_counter_engraver"
+    }
+  }
+
+  \midi { }
+}

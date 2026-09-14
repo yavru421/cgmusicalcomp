@@ -1,26 +1,21 @@
 \version "2.24.0"
-\include "articulate.ly"
 
 \header {
   title = "Moonlight Samba"
-  subtitle = "Arranged for Concert Band & Percussion Ensemble"
+  subtitle = "Adagio Maestoso con Samba — For Concert Band"
   composer = "Ludwig van Beethoven"
   arranger = "John Daniel Dondlinger"
-  tagline = "Composed & Arranged for Wisconsin Rapids City Band by John Daniel Dondlinger"
+  tagline = "Dedicated to the Wisconsin Rapids City Band by John Daniel Dondlinger"
 }
 
-#(set-global-staff-size 13)
+#(set-global-staff-size 14)
 
 \paper {
   #(set-paper-size "letter")
-  top-margin = 0.4\in
-  bottom-margin = 0.4\in
+  top-margin = 0.5\in
+  bottom-margin = 0.5\in
   left-margin = 0.5\in
-  right-margin = 0.4\in
-  ragged-last-bottom = ##f
-  ragged-bottom = ##f
-  system-system-spacing.basic-distance = #11
-  score-system-spacing.basic-distance = #11
+  right-margin = 0.5\in
 }
 
 global = {
@@ -29,622 +24,395 @@ global = {
 }
 
 % =======================================================================
-% 1. LEAD FLUTE (Concert Pitch)
-% =======================================================================
-fluteConcert = \relative c'' {
-  \global
-  \clef treble
-  \tempo "Samba Energico" 4 = 140
-  % Intro (mm. 1-8)
-  R1 * 8 |
-  
-  % Section A: First Theme (mm. 9-16)
-  r4. gis8\f ~ gis8 gis16 gis gis8. gis16 |
-  gis4. gis8 gis2 |
-  r8 a4\f gis8 fis4. a8 |
-  gis1 ~ |
-  gis4 r8 gis8 ~ gis8 gis16 gis gis8. gis16 |
-  gis4. gis8 gis2 |
-  r8 a4 gis8 fis4. a8 |
-  gis2 ~ gis8 fis e dis |
-  
-  % Section B: Driving Counterpoint (mm. 17-24)
-  cis8\ff dis e fis gis a b cis |
-  d4. cis8 b4 a |
-  gis4. fis8 e4 dis |
-  cis2. r4 |
-  r8 gis16 cis e8 gis,16 cis e8 gis,16 cis e8 gis, |
-  r8 a16 cis e8 a,16 cis e8 a,16 d fis8 a, |
-  r8 gis16 bis fis'8 gis,16 bis e8 gis,16 bis dis8 gis, |
-  cis1\ff |
-  
-  % Section C: Middle Break & Slowdown (mm. 25-32)
-  \tempo "Adagio - Bossa Sostenuto" 4 = 68
-  R1\p |
-  r2. gis4\pp |
-  gis4. gis8 gis2 |
-  a4. gis8 fis4. a8 |
-  gis1 ~ |
-  gis4. gis8 a4. b8 |
-  cis4. b8 a4. gis8 |
-  fis4. e8 dis2\fermata |
-  
-  % Section D: Reprise & Climax (mm. 33-44)
-  \tempo "A Tempo - Samba Feroce" 4 = 144
-  R1 |
-  r4. gis8\ff ~ gis8 gis16 gis gis8. gis16 |
-  gis4. gis8 gis2 |
-  r8 a4 gis8 fis4. a8 |
-  gis2 ~ gis8 gis fis e |
-  dis4. e8 dis4. e8 |
-  cis8 dis e fis gis a b cis |
-  d4. cis8 b4 a |
-  gis8\fff r gis r gis4 gis8 gis |
-  a8 r a r a4 a8 a |
-  b8 r b r bis4 bis8 bis |
-  cis1\fff \bar "|."
-}
-
-% =======================================================================
-% 2. B♭ TRUMPET (Concert Pitch Definition)
-% =======================================================================
-trumpetConcert = \relative c' {
-  \global
-  \clef treble
-  \tempo "Samba Energico" 4 = 140
-  % Intro (mm. 1-8) - Trumpet enters in m. 5
-  R1 * 4 |
-  r8 cis4.\f ~ cis4 cis8 cis |
-  r8 dis4. ~ dis4 dis8 dis |
-  r8 e4. d4. cis8 |
-  bis2\f r8 dis\f e fis |
-  
-  % Section A: Call & Response (mm. 9-16)
-  gis4.\f gis8 ~ gis4 gis8 a |
-  b4. a8 gis2 |
-  fis4. e8 dis4. fis8 |
-  e2 r8 bis\f cis dis |
-  e4.\f dis8 cis4. dis8 |
-  e4. fis8 gis2 |
-  fis4. e8 dis4. fis8 |
-  e2. r4 |
-  
-  % Section B: High Brass Lead (mm. 17-24)
-  e8\ff fis gis a b cis d e |
-  fis4. e8 d4 cis |
-  bis4. a8 gis4 fis |
-  e2. r4 |
-  r8 cis4.\f ~ cis4 cis8 cis |
-  r8 d4. ~ d4 d8 d |
-  r8 bis4. ~ bis4 bis8 bis |
-  cis1\ff |
-  
-  % Section C: Middle Break & Slowdown (mm. 25-32)
-  \tempo "Adagio - Bossa Sostenuto" 4 = 68
-  R1 * 3 |
-  r2 r8 dis\p e fis |
-  e1 ~ |
-  e4. e8 fis4. gis8 |
-  a4. gis8 fis4. e8 |
-  dis4. cis8 bis2\fermata |
-  
-  % Section D: Reprise & Lead (mm. 33-44)
-  \tempo "A Tempo - Samba Feroce" 4 = 144
-  r2.. gis8\ff |
-  cis4.\ff b8 a4. b8 |
-  cis4. d8 e2 |
-  d4. cis8 b4. d8 |
-  cis2 ~ cis8 dis e fis |
-  gis4. a8 gis4. a8 |
-  e8 fis gis a b cis d e |
-  fis4. e8 d4 cis |
-  cis8\fff r cis r cis4 cis8 cis |
-  d8 r d r d4 d8 d |
-  bis8 r bis r bis4 bis8 bis |
-  cis1\fff \bar "|."
-}
-
-% =======================================================================
-% 3. FRENCH HORN IN F (Concert Pitch Definition)
-% =======================================================================
-hornConcert = \relative c' {
-  \global
-  \clef treble
-  \tempo "Samba Energico" 4 = 140
-  % Intro (mm. 1-8) - Horn enters in m. 3
-  R1 * 2 |
-  r4 cis\mf d4. cis8 |
-  bis2 cis |
-  r8 cis4.\f ~ cis4 cis8 cis |
-  r8 cis4. ~ cis4 cis8 cis |
-  r8 cis4. d4 d8 d |
-  bis2\f r4 cis8 dis |
-  
-  % Section A: Countermelody & Swells (mm. 9-16)
-  e4.\f dis8 cis4. e8 |
-  gis4. fis8 e2 |
-  d4. cis8 bis4. dis8 |
-  cis2 r4 cis8 dis |
-  e4. dis8 cis4. e8 |
-  gis4. a8 b2 |
-  a4. gis8 fis4. a8 |
-  gis2. r4 |
-  
-  % Section B: Horn Fanfares (mm. 17-24)
-  cis8\ff r cis r cis4 cis8 cis |
-  d8 r d r d4 d8 d |
-  bis8 r bis r bis4 bis8 bis |
-  cis2. r4 |
-  r8 cis4.\f ~ cis4 cis8 cis |
-  r8 d4. ~ d4 d8 d |
-  r8 bis4. ~ bis4 bis8 bis |
-  cis1\ff |
-  
-  % Section C: Middle Break & Slowdown (mm. 25-32)
-  \tempo "Adagio - Bossa Sostenuto" 4 = 68
-  cis1\pp ~ |
-  cis1 |
-  cis2 d |
-  bis2 cis |
-  cis1 ~ |
-  cis1 |
-  cis2 d |
-  bis2\fermata r2 |
-  
-  % Section D: Reprise (mm. 33-44)
-  \tempo "A Tempo - Samba Feroce" 4 = 144
-  R1 |
-  r8 cis4.\ff ~ cis4 cis8 cis |
-  r8 cis4. ~ cis4 cis8 cis |
-  r8 cis4. d4 d8 d |
-  r8 bis4. cis4 cis8 cis |
-  r8 bis4. cis4 cis8 cis |
-  cis8 r cis r cis4 cis8 cis |
-  d8 r d r d4 d8 d |
-  cis8\fff r cis r cis4 cis8 cis |
-  d8 r d r d4 d8 d |
-  bis8 r bis r bis4 bis8 bis |
-  cis1\fff \bar "|."
-}
-
-% =======================================================================
-% 4. TROMBONE (Concert Pitch, Authentic Tenor Trombone Range C2-G4)
-% =======================================================================
-tromboneConcert = \relative c {
-  \global
-  \clef bass
-  \tempo "Samba Energico" 4 = 140
-  % Intro (mm. 1-8) - Trombone enters in m. 5
-  R1 * 4 |
-  r4 cis8\f cis r4 cis |
-  r4 b,8\f\glissando cis r2 |
-  r4 a,8\f a, r4 d |
-  gis,2\f\glissando cis |
-  
-  % Section A: Low Brass Punches & Slides (mm. 9-16)
-  r8 cis4.\f ~ cis4 cis8 cis |
-  r8 b,4.\glissando cis2 |
-  r8 a,4.\f d4 d8 d |
-  gis,2\glissando cis4 r |
-  r8 cis4.\f ~ cis4 cis8 cis |
-  r8 b,4.\glissando cis2 |
-  r8 a,4.\f d4 d8 d |
-  gis,1\f |
-  
-  % Section B: Big Brass Rips (mm. 17-24)
-  cis8\ff dis e fis gis a b cis' |
-  d'4.\glissando cis'8 b4 a |
-  gis4.\glissando fis8 e4 dis |
-  cis2. r4 |
-  cis8\f cis r cis cis4 cis |
-  d8 d r d d4 d |
-  bis,8 bis, r bis, bis,4 bis, |
-  cis2\ff\bendAfter #3 gis2\fff\bendAfter #-4 |
-  
-  % Section C: Middle Break & Slowdown (mm. 25-32) - Clean Tenor Range
-  \tempo "Adagio - Bossa Sostenuto" 4 = 68
-  cis1\pp |
-  b,1 |
-  a,2 d |
-  gis,1 |
-  cis1 |
-  b,1 |
-  a,2 d |
-  cis2 gis,\fermata |
-  
-  % Section D: Reprise (mm. 33-44)
-  \tempo "A Tempo - Samba Feroce" 4 = 144
-  r2.. gis8\ff |
-  cis'4.\ff b8 a4. b8 |
-  cis'4. d'8 e'2 |
-  d'4. cis'8 b4. d'8 |
-  cis'2 ~ cis'8 dis' e' fis' |
-  gis'4. a'8 gis'4. a'8 |
-  cis8 dis e fis gis a b cis' |
-  d'4. cis'8 b4 a |
-  cis'8\fff r cis' r cis'4 cis'8 cis' |
-  d'8 r d' r d'4 d'8 d' |
-  gis8 r gis r gis4 gis8 gis |
-  cis1\fff \bar "|."
-}
-
-% =======================================================================
-% 5. B♭ CLARINET (Concert Pitch Definition)
+% 1. B♭ CLARINET (The Hypnotic Moonlight Triplet Stream - Sostenuto)
 % =======================================================================
 clarinetConcert = \relative c' {
   \global
   \clef treble
-  \tempo "Samba Energico" 4 = 140
-  % Intro (mm. 1-8)
-  r8 gis16\p cis e8 gis,16 cis e8 gis,16 cis e8 gis, |
-  r8 gis16 cis e8 gis,16 cis e8 gis,16 cis e8 gis, |
-  r8 a16 cis e8 a,16 cis e8 a,16 d fis8 a, |
-  r8 gis16 bis fis'8 gis,16 bis e8 gis,16 bis dis8 gis, |
-  r8 gis16 cis e8 gis,16 cis e8 gis,16 cis e8 gis, |
-  r8 gis16 cis e8 gis,16 cis e8 gis,16 cis e8 gis, |
-  r8 a16 cis e8 a,16 cis e8 a,16 d fis8 a, |
-  r8 gis16 bis fis'8 gis,16 bis e8 gis,16 bis dis8 gis, |
-  
-  % Section A (mm. 9-16)
-  r8 gis16\f cis e8 gis,16 cis e8 gis,16 cis e8 gis, |
-  r8 gis16 cis e8 gis,16 cis e8 gis,16 cis e8 gis, |
-  r8 a16 cis e8 a,16 cis e8 a,16 d fis8 a, |
-  r8 gis16 bis fis'8 gis,16 bis e8 gis,16 bis dis8 gis, |
-  r8 gis16 cis e8 gis,16 cis e8 gis,16 cis e8 gis, |
-  r8 gis16 cis e8 gis,16 cis e8 gis,16 cis e8 gis, |
-  r8 a16 cis e8 a,16 cis e8 a,16 d fis8 a, |
-  r8 gis16 bis fis'8 gis,16 bis e8 gis,16 bis dis8 gis, |
-  
-  % Section B (mm. 17-24)
-  cis16\ff dis e fis gis8 cis, cis16 dis e fis gis8 cis, |
-  d16 e fis g a8 d, d16 e fis g a8 d, |
-  gis,16 bis dis fis gis8 bis, fis'16 dis bis gis dis'8 gis, |
-  cis2. r4 |
-  r8 cis16 e gis8 cis,16 e gis8 cis,16 e gis8 cis, |
-  r8 d16 fis a8 d,16 fis a8 d,16 fis a8 d, |
-  r8 bis,16 dis fis8 bis,16 dis fis8 bis,16 dis fis8 bis, |
-  cis1\ff |
-  
-  % Section C: Middle Break & Slowdown (mm. 25-32)
-  \tempo "Adagio - Bossa Sostenuto" 4 = 68
+  \tempo "Adagio Maestoso con Samba" 4 = 88
   \tuplet 3/2 4 {
-    gis8\pp cis e gis, cis e gis, cis e gis, cis e |
-    gis, cis e gis, cis e gis, cis e gis, cis e |
-    a, cis e a, cis e a, d fis a, d fis |
-    gis, bis fis' gis, cis e gis, bis dis gis, cis e |
-    gis, cis e gis, cis e gis, cis e gis, cis e |
-    gis, cis e gis, cis e gis, cis e gis, cis e |
-    a, cis e a, cis e a, d fis a, d fis |
-    gis, bis dis gis, cis e
+    % Phase 1: Solitary Ache (mm. 1-8) - pp
+    gis8\pp cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
+    gis8 cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
+    a8 cis' e'  a cis' e'  a d' fis'  a d' fis' |
+    gis8 bis dis'  gis bis dis'  gis bis dis'  gis bis dis' |
+    gis8\p cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
+    gis8 cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
+    a8 cis' e'  a cis' e'  a d' fis'  a d' fis' |
+    gis8 bis dis'  gis bis dis'  gis cis' e'  gis bis dis' |
+
+    % Phase 2: Layering Tears (mm. 9-16) - p / mp
+    gis8\p cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
+    gis8 cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
+    a8 cis' e'  a cis' e'  a d' fis'  a d' fis' |
+    gis8 bis dis'  gis bis dis'  gis cis' e'  gis bis dis' |
+    a8\mp cis' e'  a cis' e'  a cis' e'  a cis' e' |
+    fis8 a d'  fis a d'  fis a d'  fis a d' |
+    gis8 bis dis'  gis bis dis'  gis bis dis'  gis bis dis' |
+    gis8 bis dis'  gis bis dis'  gis bis dis'  gis bis dis' |
+
+    % Phase 3: THE DROP (mm. 17-28) - Swelling into f / ff
+    cis'8\f e' gis'  cis' e' gis'  cis' e' gis'  cis' e' gis' |
+    d'8 fis' a'  d' fis' a'  d' fis' a'  d' fis' a' |
+    bis8 dis' fis'  bis dis' fis'  bis dis' fis'  bis dis' fis' |
+    cis'8 e' gis'  cis' e' gis'  cis' e' gis'  cis' e' gis' |
+    cis'8\ff e' gis'  cis' e' gis'  cis' e' gis'  cis' e' gis' |
+    d'8 fis' a'  d' fis' a'  d' fis' a'  d' fis' a' |
+    bis8 dis' fis'  bis dis' fis'  bis dis' fis'  bis dis' fis' |
+    cis'8 e' gis'  cis' e' gis'  cis' e' gis'  cis' e' gis' |
+    e'8 gis' cis''  e' gis' cis''  e' gis' cis''  e' gis' cis'' |
+    fis'8 a' d''  fis' a' d''  fis' a' d''  fis' a' d'' |
+    dis'8 fis' bis'  dis' fis' bis'  dis' fis' bis'  dis' fis' bis' |
+    cis'8 e' gis'  cis' e' gis'  cis' e' gis'  cis' e' gis' |
+
+    % Phase 4: THE FADE OUT (mm. 29-36) - Softening mp -> p
+    gis8\mp cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
+    gis8 cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
+    a8 cis' e'  a cis' e'  a d' fis'  a d' fis' |
+    gis8 bis dis'  gis bis dis'  gis cis' e'  gis bis dis' |
+    gis8\p cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
+    gis8 cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
+    a8 cis' e'  a cis' e'  a d' fis'  a d' fis' |
+    gis8 bis dis'  gis bis dis'  gis cis' e'  gis bis dis' |
+
+    % Phase 5: Transcendent Resolution (mm. 37-44) - pp -> ppp
+    gis8\pp cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
+    gis8 cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
+    a8 cis' e'  a cis' e'  a d' fis'  a d' fis' |
+    gis8 bis dis'  gis bis dis'  gis cis' e'  gis bis dis' |
+    gis8\ppp cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
+    gis8 cis' e'  gis cis' e'  gis cis' e'  gis cis' e' |
   }
-  gis,2\fermata |
-  
-  % Section D: Reprise (mm. 33-44)
-  \tempo "A Tempo - Samba Feroce" 4 = 144
-  R1 |
-  r8 gis16\ff cis e8 gis,16 cis e8 gis,16 cis e8 gis, |
-  r8 gis16 cis e8 gis,16 cis e8 gis,16 cis e8 gis, |
-  r8 a16 cis e8 a,16 cis e8 a,16 d fis8 a, |
-  r8 gis16 bis fis'8 gis,16 bis e8 gis,16 bis dis8 gis, |
-  r8 gis16 bis fis'8 gis,16 bis e8 gis,16 bis dis8 gis, |
-  cis16 dis e fis gis8 cis, cis16 dis e fis gis8 cis, |
-  d16 e fis g a8 d, d16 e fis g a8 d, |
-  cis8\fff r cis r cis4 cis8 cis |
-  d8 r d r d4 d8 d |
-  bis,8 r bis, r bis,4 bis,8 bis, |
-  cis1\fff \bar "|."
+  cis'1\fermata\ppp \bar "|."
 }
 
 % =======================================================================
-% 6. BASS (Electric / Upright Bass / Tuba foundation)
+% 2. FRENCH HORN IN F (Noble Lyrical Heart - Horn Medley Lead)
+% =======================================================================
+hornConcert = \relative c' {
+  \global
+  \clef treble
+  \tempo "Adagio Maestoso con Samba" 4 = 88
+  % Phase 1: Solitary Ache (mm. 1-8) - Enters alone in m. 5
+  R1 * 4 |
+  r4. gis8\p gis8. gis16 gis8. gis16 |
+  gis4. gis8 gis2 |
+  r8 a4\mp gis8 fis4. a8 |
+  gis1 ~ |
+
+  % Phase 2: Layering (mm. 9-16) - Horn harmonizes with entering Trombone
+  gis4. gis8 gis8. gis16 gis8. gis16 |
+  gis4. gis8 gis2 |
+  r8 a4\mp gis8 fis4. a8 |
+  gis2 ~ gis8 fis e dis |
+  cis4.\mf dis8 e4. fis8 |
+  fis4. gis8 a2 |
+  bis4. cis'8 dis'4. bis8 |
+  bis2.\> r4\p |
+
+  % Phase 3: THE DROP (mm. 17-28) - Horn Choir Power
+  cis'4.\f dis'8 e'4. fis'8 |
+  fis'4. gis'8 a'2 |
+  gis'4. fis'8 e'4. dis'8 |
+  cis'2. r4 |
+  cis'4.\ff dis'8 e'4. fis'8 |
+  a'4. gis'8 fis'2 |
+  bis'4. a'8 gis'4. fis'8 |
+  e'2 ~ e'8 dis' e' fis' |
+  gis'4.\ff a'8 gis'4. a'8 |
+  a'4. b'8 a'2 |
+  bis'4. cis''8 bis'4. a'8 |
+  gis'2. r4 |
+
+  % Phase 4: THE FADE OUT (mm. 29-36) - Gentle Horn Chorale
+  gis4.\mp gis8 gis8. gis16 gis8. gis16 |
+  gis4. gis8 gis2 |
+  r8 a4 gis8 fis4. a8 |
+  gis1 ~ |
+  gis4.\p gis8 gis4. gis8 |
+  a4. a8 a2 |
+  gis4. gis8 fis4. a8 |
+  gis2. r4 |
+
+  % Phase 5: Transcendent Resolution (mm. 37-44) - Solitary Horn Echo
+  gis4.\pp gis8 gis8. gis16 gis8. gis16 |
+  gis4. gis8 gis2 |
+  r8 a4 gis8 fis4. a8 |
+  gis1 ~ |
+  gis1\ppp ~ |
+  gis1 |
+  cis1\fermata\ppp \bar "|."
+}
+
+% =======================================================================
+% 3. TROMBONE (Deep Velvet Tenor - Layers in at m. 9)
+% =======================================================================
+tromboneConcert = \relative c {
+  \global
+  \clef bass
+  \tempo "Adagio Maestoso con Samba" 4 = 88
+  % Phase 1: Solitary Ache (mm. 1-8) - Silent, letting Horn open alone
+  R1 * 8 |
+
+  % Phase 2: Layering Tears (mm. 9-16) - Enters with mournful tenor counterpoint
+  e4.\p dis8 cis4. dis8 |
+  e4. fis8 gis2 |
+  r8 fis4\mp e8 dis4. fis8 |
+  e2 ~ e8 dis cis b, |
+  a,4.\mf b,8 cis4. dis8 |
+  d4. e8 fis2 |
+  gis4. a8 bis4. gis8 |
+  gis2.\> r4\p |
+
+  % Phase 3: THE DROP (mm. 17-28) - Resonant Brass Power
+  cis8\f dis e fis gis a b cis' |
+  d'4. cis'8 b4 a |
+  gis4. fis8 e4 dis |
+  cis2. r4 |
+  cis'4.\ff b8 a4. b8 |
+  d'4. cis'8 b2 |
+  gis4. a8 b4. a8 |
+  gis2 ~ gis8 fis e dis |
+  cis4.\ff dis8 e4. fis8 |
+  fis4. gis8 a2 |
+  bis4. cis'8 bis4. a8 |
+  gis2. r4 |
+
+  % Phase 4: THE FADE OUT (mm. 29-36) - Warm Velvet Chorale
+  e4.\mp dis8 cis2 |
+  e4. dis8 e2 |
+  r8 fis4 e8 dis4. fis8 |
+  e1 ~ |
+  e4.\p e8 e4. e8 |
+  fis4. fis8 fis2 |
+  dis4. dis8 dis4. dis8 |
+  cis2. r4 |
+
+  % Phase 5: Transcendent Resolution (mm. 37-44) - Low Pedal
+  cis2\pp gis, |
+  cis2 gis, |
+  a,2 d |
+  gis,1 |
+  cis1\ppp ~ |
+  cis1 |
+  cis,1\fermata\ppp \bar "|."
+}
+
+% =======================================================================
+% 4. B♭ TRUMPET (Lyrical Soul - Layers in at m. 13, Soars in Phase 3)
+% =======================================================================
+trumpetConcert = \relative c' {
+  \global
+  \clef treble
+  \tempo "Adagio Maestoso con Samba" 4 = 88
+  % Phase 1: Solitary Ache (mm. 1-8) - Silent
+  R1 * 8 |
+
+  % Phase 2: Layering (mm. 9-16) - Enters gently at m. 13 in warm 3-part chord
+  R1 * 4 |
+  e'4.\mf fis'8 gis'4. a'8 |
+  a'4. b'8 cis''2 |
+  dis''4. e''8 fis''4. dis''8 |
+  dis''2.\> r4\p |
+
+  % Phase 3: THE DROP (mm. 17-28) - Crying, Soaring Lyrical Passion
+  e''8\f fis'' gis'' a'' b'' cis''' d''' e''' |
+  fis'''4. e'''8 d'''4 cis''' |
+  bis''4. a''8 gis''4 fis'' |
+  e''2. r4 |
+  e''4.\ff fis''8 gis''4. a''8 |
+  fis'''4. e'''8 d'''2 |
+  dis'''4. cis'''8 bis''4. a''8 |
+  gis''2 ~ gis''8 fis'' e'' dis'' |
+  cis''4.\ff dis''8 e''4. fis''8 |
+  d''4. e''8 fis''2 |
+  dis''4. e''8 dis''4. cis''8 |
+  cis''2. r4 |
+
+  % Phase 4: THE FADE OUT (mm. 29-36) - Softens into Warm Lead
+  e''4.\mp dis''8 cis''2 |
+  b'4. a'8 gis'2 |
+  r8 a'4 gis'8 fis'4. a'8 |
+  gis'1 ~ |
+  gis'4.\p gis'8 cis''4. cis''8 |
+  d''4. d''8 d''2 |
+  bis'4. bis'8 bis'4. bis'8 |
+  cis'2. r4 |
+
+  % Phase 5: Transcendent Resolution (mm. 37-44) - Silent, leaving Horn solo
+  R1 * 6 |
+  cis'1\fermata\ppp \bar "|."
+}
+
+% =======================================================================
+% 5. FLUTE (Ethereal Air - Peaks at the Climax mm. 17-28)
+% =======================================================================
+fluteConcert = \relative c'' {
+  \global
+  \clef treble
+  \tempo "Adagio Maestoso con Samba" 4 = 88
+  % Silent for Phases 1 and 2
+  R1 * 16 |
+
+  % Phase 3: THE DROP - Soaring ethereal high octaves above the horns
+  r2 r8 gis''4.\f ~ |
+  gis''4. a''8 b''2 |
+  bis''4. a''8 gis''4. fis''8 |
+  e''2. r4 |
+  gis''4.\ff a''8 b''4. cis'''8 |
+  d'''4. cis'''8 b''2 |
+  bis''4. cis'''8 dis'''4. bis''8 |
+  cis'''2 ~ cis'''8 gis'' a'' b'' |
+  cis'''4.\ff b''8 a''4. b''8 |
+  cis'''4. d'''8 e'''2 |
+  dis'''4. e'''8 dis'''4. bis''8 |
+  cis'''2. r4 |
+
+  % Phase 4 & 5: Fades away
+  R1 * 8 |
+  R1 * 6 |
+  cis'''1\fermata\ppp \bar "|."
+}
+
+% =======================================================================
+% 6. BASS (Deep Acoustic Foundation - Enters with Drop in m. 17)
 % =======================================================================
 bassConcert = \relative c, {
   \global
   \clef bass
-  \tempo "Samba Energico" 4 = 140
-  % Intro (mm. 1-8)
-  cis4.\f cis8 ~ cis4 cis |
-  b4. b8 ~ b4 b |
-  a4. a8 ~ a4 d |
-  gis,4. gis8 ~ gis4 gis |
-  cis4. cis8 ~ cis4 cis |
-  b4. b8 ~ b4 b |
-  a4. a8 ~ a4 d |
-  gis,2\f\> cis4\p r |
-  
-  % Section A (mm. 9-16)
-  cis4.\f cis8 ~ cis4 cis |
-  b4. b8 ~ b4 b |
-  a4. a8 ~ a4 d |
-  gis,4. gis8 ~ gis4 gis |
-  cis4. cis8 ~ cis4 cis |
-  b4. b8 ~ b4 b |
-  a4. a8 ~ a4 d |
-  gis,1\f |
-  
-  % Section B (mm. 17-24)
-  cis8\ff dis e fis gis a b cis |
-  d4. cis8 b4 a |
-  gis4. fis8 e4 dis |
-  cis2. r4 |
-  cis4.\f cis8 ~ cis4 cis |
-  d4. d8 ~ d4 d |
-  bis,4. bis,8 ~ bis,4 bis, |
-  cis1\ff |
-  
-  % Section C: Middle Break & Slowdown (mm. 25-32)
-  \tempo "Adagio - Bossa Sostenuto" 4 = 68
-  cis,1\pp |
+  \tempo "Adagio Maestoso con Samba" 4 = 88
+  % Phase 1: Pure pedal tone on C# (mm. 1-8)
+  cis,1\pp ~ |
+  cis,1 |
+  a,,2( d,) |
+  gis,,1 |
+  cis,1\p ~ |
+  cis,1 |
+  a,,2( d,) |
+  gis,,1 |
+
+  % Phase 2: Warm Harmonic Movement (mm. 9-16)
+  cis,1\p |
   b,,1 |
-  a,,2 d, |
+  a,,2( d,) |
+  gis,,1 |
+  a,,1\mp |
+  d,1 |
+  gis,,1 ~ |
+  gis,,1 |
+
+  % Phase 3: THE DROP (mm. 17-28) - Deep Walking Samba Pocket
+  cis,4.\f cis8 r4 cis |
+  d,4. d8 r4 d |
+  bis,,4. bis,8 r4 bis, |
+  cis,4. cis8 r4 cis |
+  cis,4.\ff cis8 r4 cis |
+  d,4. d8 r4 d |
+  bis,,4. bis,8 r4 bis, |
+  cis,4. cis8 r4 cis |
+  cis,4.\ff cis8 r4 cis |
+  d,4. d8 r4 d |
+  gis,,4. gis,8 r4 gis, |
+  cis,4. cis8 r4 cis |
+
+  % Phase 4: THE FADE OUT (mm. 29-36) - Softening Pulse -> Pedal
+  cis,4.\mp cis8 r4 cis |
+  cis,4. cis8 r4 cis |
+  a,,4. a,8 r4 d |
+  gis,,4. gis,8 r4 gis, |
+  cis,4.\p cis8 r4 cis |
+  d,4. d8 r4 d |
   gis,,1 |
   cis,1 |
-  b,,1 |
-  a,,2 d, |
-  gis,,1\fermata |
-  
-  % Section D: Reprise (mm. 33-44)
-  \tempo "A Tempo - Samba Feroce" 4 = 144
-  R1 |
-  cis4.\ff cis8 ~ cis4 cis |
-  b4. b8 ~ b4 b |
-  a4. a8 ~ a4 d |
-  gis,4. gis8 ~ gis4 gis |
-  gis,4. gis8 ~ gis4 gis |
-  cis8 cis r cis cis4 cis |
-  d8 d r d d4 d |
-  cis8\fff r cis r cis4 cis8 cis |
-  d8 r d r d4 d8 d |
-  gis,8 r gis, r gis4 gis8 gis |
-  cis1\fff \bar "|."
+
+  % Phase 5: Transcendent Resolution (mm. 37-44) - Subterranean Pedal
+  cis,,1\pp ~ |
+  cis,,1 |
+  a,,2( d,) |
+  gis,,1 |
+  cis,,1\ppp ~ |
+  cis,,1 |
+  cis,,1\fermata\ppp \bar "|."
 }
 
 % =======================================================================
-% 7. PERCUSSION 1: CONCERT SNARE DRUM & BASS DRUM
+% 7. PERCUSSION: THE DROP & FADE-OUT SAMBA BATTERY
 % =======================================================================
 percussionOne = \drummode {
   <<
     {
-      % Snare Drum Samba Clave & Accents
-      \repeat unfold 7 {
-        sn8. sn16 ~ sn8 sn sn8. sn16 ~ sn8 sn |
+      % Shaker / Caixa Rimshot Engine
+      % Phase 1: Silent (mm. 1-8)
+      R1 * 8 |
+
+      % Phase 2: Silent (mm. 9-15), subtle swell in m. 16
+      R1 * 7 |
+      cyms1:32\p\< |
+
+      % Phase 3: THE DROP (mm. 17-28) - Crisp, Infectious Samba Groove!
+      \repeat unfold 4 {
+        sn8.\f sn16 ~ sn8 sn r8 sn sn4 |
       }
-      % m. 8 Roll into Section A
-      sn4 sn8 sn sn2:32 |
-      
-      \repeat unfold 15 {
-        sn8. sn16 ~ sn8 sn sn8. sn16 ~ sn8 sn |
+      \repeat unfold 4 {
+        sn8.\ff sn16 ~ sn8 sn r8 sn sn4 |
       }
-      % m. 24 Fermata Roll
-      sn8\ff sn16 sn sn8 sn sn2:32\fermata |
-      
-      % Section C: Middle Break (Soft Rim Clicks)
-      sn4\pp r sn r |
-      sn4 r sn r |
-      sn4 r sn r |
-      sn4 r sn r |
-      sn4 r sn r |
-      sn4 r sn r |
-      sn4 r sn r |
-      sn2:32\fermata\pp r2 |
-      
-      % Section D: Reprise (m. 33 Solo Snare Breakout)
-      sn16\fff sn sn sn toml toml tommh tommh toml toml tommh tommh sn8 sn |
-      \repeat unfold 7 {
-        sn8. sn16 ~ sn8 sn sn8. sn16 ~ sn8 sn |
+      \repeat unfold 4 {
+        sn8.\ff sn16 ~ sn8 sn r8 sn sn4 |
       }
-      sn8\fff sn16 sn sn8 sn sn4 sn |
-      sn8 sn16 sn sn8 sn sn4 sn |
-      sn8 sn sn sn sn2:32 |
-      sn1\fff \bar "|."
+
+      % Phase 4: THE FADE OUT (mm. 29-36) - Fading into nothing
+      sn8.\mp sn16 ~ sn8 sn r8 sn sn4 |
+      sn8. sn16 ~ sn8 sn r8 sn sn4 |
+      sn8.\p sn16 ~ sn8 sn r8 sn sn4 |
+      sn8. sn16 ~ sn8 sn r8 sn sn4 |
+      cab16\pp cab cab cab cab cab cab cab cab cab cab cab cab cab cab cab |
+      cab16 cab cab cab cab cab cab cab cab cab cab cab cab cab cab cab |
+      cyms1:32\ppp\> ~ |
+      cyms2\ppp r2 |
+
+      % Phase 5: Transcendent Resolution (mm. 37-44) - 100% Silent
+      R1 * 6 |
+      r1\fermata \bar "|."
     }
     \\
     {
-      % Concert Bass Drum (Surdo Heartbeat)
-      \repeat unfold 7 {
-        bd4 bd8 bd ~ bd4 bd |
+      % Heavy Surdo Heartbeat (Bass Drum)
+      % Phase 1: Silent (mm. 1-8)
+      R1 * 8 |
+
+      % Phase 2: Silent (mm. 9-16)
+      R1 * 8 |
+
+      % Phase 3: THE DROP (mm. 17-28) - Deep Heartbeat Punch!
+      \repeat unfold 4 {
+        bd4\f r8 bd bd4 r |
       }
-      % m. 8
-      bd4 r bd r |
-      
-      \repeat unfold 15 {
-        bd4 bd8 bd ~ bd4 bd |
+      \repeat unfold 4 {
+        bd4\ff r8 bd bd4 r |
       }
-      % m. 24
-      bd4 bd bd r\fermata |
-      
-      % Middle Break
+      \repeat unfold 4 {
+        bd4\ff r8 bd bd4 r |
+      }
+
+      % Phase 4: THE FADE OUT (mm. 29-36) - Calming heartbeat
+      bd4\mp r8 bd bd4 r |
+      bd4 r8 bd bd4 r |
+      bd4\p r8 bd bd4 r |
+      bd4 r8 bd bd4 r |
       bd4\pp r bd r |
       bd4 r bd r |
-      bd4 r bd r |
-      bd4 r bd r |
-      bd4 r bd r |
-      bd4 r bd r |
-      bd4 r bd r |
-      bd1\fermata\pp |
-      
-      % Reprise
-      r1 |
-      \repeat unfold 7 {
-        bd4 bd8 bd ~ bd4 bd |
-      }
-      bd4 bd bd bd |
-      bd4 bd bd bd |
-      bd4 bd bd bd |
-      bd1\fff \bar "|."
+      bd1\ppp ~ |
+      bd2\ppp r2 |
+
+      % Phase 5: Silent (mm. 37-44)
+      R1 * 6 |
+      r1\fermata \bar "|."
     }
   >>
 }
 
 % =======================================================================
-% 8. PERCUSSION 2: CRASH CYMBALS & SUSPENDED CYMBAL
-% =======================================================================
-percussionTwo = \drummode {
-  % Intro (mm. 1-8): Suspended Cymbal Swell & Crash Choke
-  cyms1:32\p\< ~ |
-  cyms1\f\> |
-  cyms1:32\p\< ~ |
-  cyms1\f\> |
-  cyms1:32\p\< ~ |
-  cyms1\f |
-  cyms2:32\< cyms8\f cyms cyms4 |
-  cymc4\ff r r2 |
-
-  % Section A (mm. 9-16)
-  \repeat unfold 7 {
-    r1 |
-  }
-  cymc4\f r r2 |
-
-  % Section B (mm. 17-24)
-  cymc4\ff r cymc r |
-  cymc4 r cymc r |
-  cymc4 r cymc r |
-  cymc4 r cymc r |
-  r1 |
-  r1 |
-  cyms2:32\f\< cyms8\ff cyms cyms4 |
-  cymc1:32\fermata\ff |
-
-  % Section C: Middle Break (Soft Brushed/Yarn Mallet Cymbal)
-  cyms1:32\pp ~ |
-  cyms1 |
-  cyms1:32 ~ |
-  cyms1 |
-  cyms1:32 ~ |
-  cyms1 |
-  cyms1:32\< ~ |
-  cyms1\fermata\p |
-
-  % Section D: Reprise (mm. 33-44)
-  r1 |
-  cymc4\ff r r2 |
-  r1 |
-  r1 |
-  cymc4\ff r cymc r |
-  cymc4 r cymc r |
-  r1 |
-  cymc4\ff r r2 |
-  cymc8\fff r cymc r cymc4 cymc8 cymc |
-  cymc8 r cymc r cymc4 cymc8 cymc |
-  cymc8 r cymc r cymc4 cymc8 cymc |
-  cymc1:32\fff \bar "|."
-}
-
-% =======================================================================
-% 9. PERCUSSION 3: AUXILIARY LATIN (Agogo / Cowbell & Shaker)
-% =======================================================================
-percussionThree = \drummode {
-  <<
-    {
-      % Cowbell Clave
-      \repeat unfold 7 {
-        cb4 cb8 cb r cb cb4 |
-      }
-      cb4 cb8 cb cb2 |
-      
-      \repeat unfold 15 {
-        cb4 cb8 cb r cb cb4 |
-      }
-      cb8\ff cb16 cb cb8 cb cb2:32\fermata |
-      
-      % Middle Break
-      R1 * 7 |
-      r1\fermata |
-      
-      % Reprise
-      r1 |
-      \repeat unfold 7 {
-        cb4 cb8 cb r cb cb4 |
-      }
-      cb8\fff cb r cb cb4 cb8 cb |
-      cb8 r cb r cb4 cb8 cb |
-      cb8 cb cb cb cb4 cb |
-      cb1\fff \bar "|."
-    }
-    \\
-    {
-      % Shaker / Maracas (Continuous 16th Samba Engine)
-      \repeat unfold 8 {
-        cab16 cab cab cab cab cab cab cab cab cab cab cab cab cab cab cab |
-      }
-      \repeat unfold 16 {
-        cab16 cab cab cab cab cab cab cab cab cab cab cab cab cab cab cab |
-      }
-      % Middle Break
-      \repeat unfold 7 {
-        cab4\pp r cab r |
-      }
-      cab1\fermata\pp |
-      
-      % Reprise
-      r1 |
-      \repeat unfold 7 {
-        cab16 cab cab cab cab cab cab cab cab cab cab cab cab cab cab cab |
-      }
-      cab4\fff cab cab cab |
-      cab4 cab cab cab |
-      cab4 cab cab cab |
-      cab1\fff \bar "|."
-    }
-  >>
-}
-
-% =======================================================================
-% 10. PERCUSSION 4: TIMPANI (Tuned to C# and G#)
-% =======================================================================
-timpaniConcert = \relative c {
-  \global
-  \clef bass
-  \tempo "Samba Energico" 4 = 140
-  % Intro (mm. 1-8)
-  R1 * 4 |
-  cis4.\f cis8 ~ cis4 cis |
-  gis,4. gis8 ~ gis4 gis |
-  cis4. cis8 ~ cis4 cis |
-  gis,2\f\> cis4\p r |
-
-  % Section A (mm. 9-16)
-  cis4.\f cis8 ~ cis4 cis |
-  cis4. cis8 ~ cis4 cis |
-  cis4. cis8 ~ cis4 cis |
-  gis,4. gis8 ~ gis4 gis |
-  cis4.\f cis8 ~ cis4 cis |
-  cis4. cis8 ~ cis4 cis |
-  cis4. cis8 ~ cis4 cis |
-  gis,1\f |
-
-  % Section B (mm. 17-24)
-  cis4\ff r cis r |
-  cis4 r cis r |
-  gis,4 r gis, r |
-  cis2. r4 |
-  cis4.\f cis8 ~ cis4 cis |
-  cis4. cis8 ~ cis4 cis |
-  gis,4. gis8 ~ gis4 gis |
-  cis2:32\ff cis4:32\fermata r |
-
-  % Section C: Middle Break (Tacet)
-  R1 * 8 |
-
-  % Section D: Reprise & Thunderous Drive (mm. 33-44)
-  \tempo "A Tempo - Samba Feroce" 4 = 144
-  r2.. gis,8\ff |
-  cis4.\ff cis8 cis4. cis8 |
-  cis4. cis8 cis2 |
-  cis4. cis8 cis4. cis8 |
-  cis2 ~ cis8 cis cis cis |
-  gis,4. gis,8 gis,4. gis,8 |
-  cis4. cis8 cis4 cis |
-  cis8 r cis r cis4 cis8 cis |
-  cis8\fff r cis r cis4 cis8 cis |
-  cis8 r cis r cis4 cis8 cis |
-  gis,8 r gis, r gis,4 gis,8 gis, |
-  cis1:32\fff \bar "|."
-}
-
-% =======================================================================
-% 11. VISUAL ENGRAVED SCORE
+% SCORE DEFINITIONS
 % =======================================================================
 \score {
   <<
@@ -657,15 +425,15 @@ timpaniConcert = \relative c {
       }
     >>
 
-    \new StaffGroup = "Brass" <<
-      \new Staff \with { instrumentName = #"B♭ Trumpet" shortInstrumentName = #"Tpt." } {
-        \transpose bes c' \trumpetConcert
-      }
+    \new StaffGroup = "Mixed Horn Medley" <<
       \new Staff \with { instrumentName = #"Horn in F" shortInstrumentName = #"Hn." } {
         \transpose f c' \hornConcert
       }
       \new Staff \with { instrumentName = #"Trombone" shortInstrumentName = #"Tbn." } {
         \tromboneConcert
+      }
+      \new Staff \with { instrumentName = #"B♭ Trumpet" shortInstrumentName = #"Tpt." } {
+        \transpose bes c' \trumpetConcert
       }
     >>
 
@@ -673,20 +441,8 @@ timpaniConcert = \relative c {
       \new Staff \with { instrumentName = #"Bass" shortInstrumentName = #"Bs." } {
         \bassConcert
       }
-    >>
-
-    \new StaffGroup = "Percussion" <<
-      \new DrumStaff \with { instrumentName = #"Percussion 1 (SD/BD)" shortInstrumentName = #"Perc. 1" } {
+      \new DrumStaff \with { instrumentName = #"Surdo & Samba Battery" shortInstrumentName = #"Perc." } {
         \percussionOne
-      }
-      \new DrumStaff \with { instrumentName = #"Percussion 2 (Cymbals)" shortInstrumentName = #"Perc. 2" } {
-        \percussionTwo
-      }
-      \new DrumStaff \with { instrumentName = #"Percussion 3 (Aux Latin)" shortInstrumentName = #"Perc. 3" } {
-        \percussionThree
-      }
-      \new Staff \with { instrumentName = #"Percussion 4 (Timpani)" shortInstrumentName = #"Timp." } {
-        \timpaniConcert
       }
     >>
   >>
@@ -698,19 +454,10 @@ timpaniConcert = \relative c {
   }
 }
 
-% =======================================================================
-% 12. AUDIO SYNTHESIS SCORE (Pure concert pitch + GM Instrument Mapping)
-% =======================================================================
 \score {
-  \unfoldRepeats \articulate <<
-    \new Staff \with { midiInstrument = #"flute" } {
-      \fluteConcert
-    }
+  <<
     \new Staff \with { midiInstrument = #"clarinet" } {
       \clarinetConcert
-    }
-    \new Staff \with { midiInstrument = #"trumpet" } {
-      \trumpetConcert
     }
     \new Staff \with { midiInstrument = #"french horn" } {
       \hornConcert
@@ -718,20 +465,17 @@ timpaniConcert = \relative c {
     \new Staff \with { midiInstrument = #"trombone" } {
       \tromboneConcert
     }
-    \new Staff \with { midiInstrument = #"electric bass (finger)" } {
+    \new Staff \with { midiInstrument = #"trumpet" } {
+      \trumpetConcert
+    }
+    \new Staff \with { midiInstrument = #"flute" } {
+      \fluteConcert
+    }
+    \new Staff \with { midiInstrument = #"acoustic bass" } {
       \bassConcert
     }
     \new DrumStaff \with { midiInstrument = #"standard kit" } {
       \percussionOne
-    }
-    \new DrumStaff \with { midiInstrument = #"standard kit" } {
-      \percussionTwo
-    }
-    \new DrumStaff \with { midiInstrument = #"standard kit" } {
-      \percussionThree
-    }
-    \new Staff \with { midiInstrument = #"timpani" } {
-      \timpaniConcert
     }
   >>
   \midi { }
