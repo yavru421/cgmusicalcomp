@@ -60,11 +60,29 @@ VOICE_RANGES: Dict[str, Dict] = {
         "is_wind": True,
         "name": "Tenor Saxophone"
     },
+    "bassoon": {
+        "min": 34,  # Bb1
+        "max": 65,  # F4
+        "is_wind": True,
+        "name": "Bassoon"
+    },
     "saxophone": {
         "min": 60,  # C4
         "max": 77,  # F5
         "is_wind": True,
         "name": "Alto Saxophone"
+    },
+    "euphonium": {
+        "min": 39,  # Eb2
+        "max": 67,  # G4
+        "is_wind": True,
+        "name": "Euphonium"
+    },
+    "baritone": {
+        "min": 39,  # Eb2
+        "max": 67,  # G4
+        "is_wind": True,
+        "name": "Baritone"
     },
     # Brass
     "trumpet": {
@@ -250,6 +268,8 @@ def audit_midi_file(mid_path: str) -> ErgonomicAuditReport:
                         match = ("oboe", VOICE_RANGES["oboe"])
                     elif prog == 71:  # Clarinet
                         match = ("clarinet", VOICE_RANGES["clarinet"])
+                    elif prog == 70:  # Bassoon
+                        match = ("bassoon", VOICE_RANGES["bassoon"])
                     elif prog == 65:  # Alto Sax
                         match = ("alto sax", VOICE_RANGES["alto sax"])
                     elif prog == 66:  # Tenor Sax

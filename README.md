@@ -9,13 +9,61 @@
 [![FluidSynth 2.4.3](https://img.shields.io/badge/Synthesizer-FluidSynth_2.4.3-green.svg?style=for-the-badge)](https://www.fluidsynth.org/)
 [![Web Jukebox PWA](https://img.shields.io/badge/Live_Jukebox-cgmusicalcomp.dondlingergc.com-cyan.svg?style=for-the-badge)](https://cgmusicalcomp.dondlingergc.com)
 [![Audio 44.1kHz Stereo](https://img.shields.io/badge/Audio-44.1kHz_Stereo_Master-orange.svg?style=for-the-badge)](file:///C:/dev/CGMusicalComposition/)
-[![13 Conductor Scores](https://img.shields.io/badge/Scores-13_Full_Conductor_Scores-purple.svg?style=for-the-badge)](file:///C:/dev/CGMusicalComposition/)
+[![14 Conductor Scores](https://img.shields.io/badge/Scores-14_Full_Conductor_Scores-purple.svg?style=for-the-badge)](file:///C:/dev/CGMusicalComposition/)
 [![33 Musician Parts](https://img.shields.io/badge/Parts-33_Musician_Parts-blueviolet.svg?style=for-the-badge)](file:///C:/dev/CGMusicalComposition/Parts/)
 [![License: MIT & CC BY 4.0](https://img.shields.io/badge/License-MIT_%26_CC_BY_4.0-red.svg?style=for-the-badge)](./LICENSE)
 [![City Band](https://img.shields.io/badge/Ensemble-Wisconsin_Rapids_City_Band-gold.svg?style=for-the-badge)](https://www.wirapids.org/)
 
 **Composed, Arranged & Orchestrated by John Daniel Dondlinger**  
 *Dedicated to the musicians, directors, and community of the Wisconsin Rapids City Band (Wisconsin Rapids, WI)*
+
+---
+
+## 🌟 Centerpiece 1: *Benchmark Instruments Suite (Version 2)*
+### Complete 14-Voice Concert Band Solo Demonstration Suite & Grand Tutti Climax
+
+The definitive showcase demonstrating every instrument in the modern American concert band across its characteristic sweet spot, idiomatic articulation, and Grade 3/4 register boundaries, culminating in a thunderous 8-measure Grand Tutti Climax in $B\flat$ Major.
+
+* **🎼 Conductor Score (PDF)**: [benchmark_instruments_showcase_v2.pdf](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_v2.pdf)
+* **🗣️ Master Audio with Wisconsin Narration (WAV)**: [benchmark_instruments_showcase_v2_narrated.wav](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_v2_narrated.wav) (274.98s, 24-bit 44.1kHz)
+* **📱 Web Release (MP3)**: [showcase_narrated_v2.mp3](file:///C:/dev/CGMusicalComposition/showcase_narrated_v2.mp3) (192 kbps)
+* **🔊 Continuous Musical Master (WAV)**: [benchmark_instruments_showcase_v2.wav](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_v2.wav)
+* **🎹 Conductor Master MIDI**: [benchmark_instruments_showcase_v2.mid](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_v2.mid)
+* **📜 Score Notation Source**: [benchmark_instruments_showcase_v2.ly](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_v2.ly)
+
+### Architectural & Ergonomic Highlights:
+1. **The 14 True Concert Band Voices**: Flute, Oboe, B♭ Clarinet, Bassoon, Alto Saxophone, Tenor Saxophone, B♭ Trumpet, French Horn in F, Tenor Trombone, Euphonium, Tuba, Timpani (4 fixed kettles: $F_2, B\flat_2, C_3, E\flat_3$), Tuned Percussion (Marimba & Bells), and Concert Battery Percussion.
+2. **Authentic Wisconsin Neural Narration**: Spoken voice intros alternate between **Malachi** (deep resonant baritone) and **Mercy** (high-clarity soprano) using the authentic Wisconsin geographic lexicon (*Wisconsin Rapids, Waupaca, Weyauwega, Wausau, Oshkosh, Ashwaubenon, Chequamegon, Fond du Lac, Prairie du Chien, Baraboo, Milwaukee*).
+3. **Calibrated Acoustic Mix Hierarchy**: Instruments are elevated front-and-center at `0.88` peak with concert band spatial seating panning (CC 10), while narration sits smoothly in the pocket at `0.38` peak.
+4. **100% Playability Compliance**: Fully audited and verified via [validate_playability.py](file:///C:/dev/CGMusicalComposition/validate_playability.py) with 0 range breaches, 0 kettle violations, and 0 wind breathing breaches.
+
+---
+
+## 🌟 Centerpiece 2: *Moonlight Samba (Latest 1-Minute Latin Concert Feature)*
+### Beethoven Op. 27 No. 2 Recast with Authentic Brazilian Snap & Mixed Horn Groove
+
+An explosive, high-energy 1-minute Latin concert band feature that fuses the haunting lyricism of Beethoven’s *Moonlight Sonata* with an authentic Afro-Brazilian samba street celebration.
+
+* **🎼 Conductor Score (PDF)**: [Scores/moonlight_samba_score.pdf](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.pdf)
+* **🔊 Master Deliverable Audio (WAV)**: [Scores/moonlight_samba_jd_send/moonlight_samba_master.wav](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_jd_send/moonlight_samba_master.wav)
+* **🎺 Individual Musician Parts (19 Printable PDFs)**: [Parts/](file:///C:/dev/CGMusicalComposition/Parts/)
+* **🎹 Master Multi-Track MIDI**: [Scores/moonlight_samba_score.mid](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.mid)
+* **📜 Score Notation Source**: [Scores/moonlight_samba_score.ly](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.ly)
+
+### Musical & Structural Architecture:
+1. **Part 1: Adagio Cantabile (♩ = 64, mm. 1–5, ~18.8s)**:
+   * **Solo Oboe** owns the lyrical Beethoven theme with reedy, singing pastoral warmth.
+   * **Marimba** rolls gentle, hypnotic triplets ($C_3–E\flat_3–G_3$) underneath.
+   * Swells to a grand hold on high $G_4$ with a dramatic Marimba tremolo roll ($p \to f$).
+2. **Part 2: Samba Energico — The Snap! (♩ = 112, mm. 6–24, ~40.7s)**:
+   * **The Snap**: Explosive tutti crash, snare rimshot, cowbell, and heavy Surdo upbeat punch at measure 6!
+   * **B♭ Trumpet** takes the syncopated Latin melody lead with bright, snappy articulation.
+   * **French Horns** drive punchy, syncopated Latin montuno brass vamps.
+   * **Trombones** execute greasy, swaggering Latin glissando slides on key phrase transitions.
+   * **Tuba & Bassoon** lock together in a bouncing Brazilian root-fifth bassline (beats 1, 2-and, 3, 4-and).
+   * **Percussion Break (mm. 16–17)**: 2-bar featured Latin battery break (strict tacet for brass embouchure recovery).
+   * **Grand Tutti Climax & Cutoff**: Soaring tutti reprise culminating in a decisive staccatissimo hit on beat 1 with crash choke and instant silence.
+3. **Zero Piano Invariant**: 100% Concert Band orchestration — zero keyboard shortcuts.
 
 ---
 
@@ -49,34 +97,17 @@ All AI agents and human contributors must comply with the three core engineering
 
 ---
 
-## 🌟 Spotlight: *Moonlight Samba* (Beethoven Op. 27 No. 2 Recast in Latin Bossa)
-
-What happens when Beethoven’s iconic *Moonlight Sonata* meets an authentic Afro-Cuban / Bossa Nova concert band groove?
-
-* **Listen to the Master Audio**: [moonlight_samba_master.wav](file:///C:/dev/CGMusicalComposition/moonlight_samba_master.wav)
-* **View the Conductor Score (PDF)**: [Scores/moonlight_samba_score.pdf](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.pdf)
-* **Individual Musician Parts (19 printable PDFs)**: [Parts/](file:///C:/dev/CGMusicalComposition/Parts/)
-* **Multi-Track MIDI Export**: [Scores/moonlight_samba_score.mid](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.mid)
-
-### Musical & Technical Innovations in *Moonlight Samba*:
-1. **Montuno & Clave Counterpoint**: Beethoven’s triplet arpeggios are re-voiced across clarinets and flutes over a syncopated bossa rhythm section (claves, cabasa, timbales, congas, bass).
-2. **Channel-Isolated Latin Percussion**: Latin percussion battery is mapped across independent MIDI channels (`ch 9, 10, 11, 12`) to eliminate General MIDI voice-stealing and drum clipping.
-3. **Calibrated Acoustic Spatialization**: FluidSynth concert hall reverberation (`room-size=0.45`, `damp=0.60`, `level=0.25`, `gain=0.45`) with spatial band seating pan curves (CC 10).
-4. **Gaussian Humanization**: Note timing micro-jitter ($\pm 6\text{ ms}$) and metric dynamic curves remove robotic MIDI stiffness across 2,495 notes.
-
----
-
 ## 🎧 Master Repertoire Jukebox & Score Catalog
 
 Every completed piece in this repository is engraved in vector PDF, exported to MIDI, and synthesized into a release-quality stereo master via FluidSynth and acoustic hall reverberation:
 
-| Work Title & Description | Key & Meter | Tempo | 🎼 Sheet Music (PDF) | 🔊 Master Audio (WAV) | 🎹 MIDI Export |
+| Work Title & Description | Key & Meter | Tempo | 🎼 Sheet Music (PDF) | 🔊 Master Audio (WAV/MP3) | 🎹 MIDI Export |
 | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Benchmark Instruments Suite (v2 Narrated)**<br>*14-voice solos with Malachi & Mercy Wisconsin narration* | $B\flat$ Major | 100 BPM | [benchmark_instruments_showcase_v2.pdf](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_v2.pdf) | [benchmark_instruments_showcase_v2_narrated.wav](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_v2_narrated.wav)<br>[showcase_narrated_v2.mp3](file:///C:/dev/CGMusicalComposition/showcase_narrated_v2.mp3) | [benchmark_instruments_showcase_v2.mid](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_v2.mid) |
+| **Benchmark Instruments Suite (v2 Continuous)**<br>*14-voice unbroken solo sequence & Grand Tutti Climax* | $B\flat$ Major | 100 BPM | [benchmark_instruments_showcase_v2.pdf](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_v2.pdf) | [benchmark_instruments_showcase_v2.wav](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_v2.wav) | [benchmark_instruments_showcase_v2.mid](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_v2.mid) |
+| **Moonlight Samba (Latest 1-Min Latin Feature)**<br>*Beethoven Op. 27 No. 2 with authentic Brazilian snap & horn groove* | C minor | $64 \to 112$ BPM | [Scores/moonlight_samba_score.pdf](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.pdf) | [moonlight_samba_master.wav](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_jd_send/moonlight_samba_master.wav) | [Scores/moonlight_samba_score.mid](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.mid) |
 | **Still D.R.E.**<br>*Concert Band Edition — G-Funk Pocket & Scott Storch Motif* | A minor | 94 BPM | [still_dre_score.pdf](file:///C:/dev/CGMusicalComposition/Scores/still_dre_score.pdf) | [still_dre_master.wav](file:///C:/dev/CGMusicalComposition/still_dre_master.wav) | [still_dre_score.mid](file:///C:/dev/CGMusicalComposition/Scores/still_dre_score.mid) |
-| **Moonlight Samba**<br>*Beethoven Op. 27 No. 2 recast in Latin Bossa* | C# minor | 116 BPM | [moonlight_samba_score.pdf](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.pdf) | [moonlight_samba_master.wav](file:///C:/dev/CGMusicalComposition/moonlight_samba_master.wav) | [moonlight_samba_score.mid](file:///C:/dev/CGMusicalComposition/Scores/moonlight_samba_score.mid) |
 | **A Soix Medley**<br>*6-movement suite with 3/4 Solo Toms Overture* | $E\flat$ / C min / D min / $B\flat$ | $120 \to 96 \to 116 \to 104 \to 95 \to 120$ | [a_soix_medley.pdf](file:///C:/dev/CGMusicalComposition/a_soix_medley.pdf) | [a_soix_medley.wav](file:///C:/dev/CGMusicalComposition/a_soix_medley.wav) | [a_soix_medley.mid](file:///C:/dev/CGMusicalComposition/a_soix_medley.mid) |
-| **Instrument Showcase & Benchmark (Narrated)**<br>*All 14 band instruments with voice intros* | $B\flat$ Major | 100 BPM | [benchmark_instruments_showcase.pdf](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase.pdf) | [benchmark_instruments_showcase_narrated.wav](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase_narrated.wav) | [benchmark_instruments_showcase.mid](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase.mid) |
-| **Instrument Showcase (Continuous)**<br>*Unbroken 60-bar solo sequence & tutti finale* | $B\flat$ Major | 100 BPM | [benchmark_instruments_showcase.pdf](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase.pdf) | [benchmark_instruments_showcase.wav](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase.wav) | [benchmark_instruments_showcase.mid](file:///C:/dev/CGMusicalComposition/benchmark_instruments_showcase.mid) |
 | **Sovereign Light**<br>*Pentatonic tone poem for band & 4-mallet marimba* | $E\flat$ Major | 96 BPM | [sovereign_light.pdf](file:///C:/dev/CGMusicalComposition/sovereign_light.pdf) | [sovereign_light.wav](file:///C:/dev/CGMusicalComposition/sovereign_light.wav) | [sovereign_light.mid](file:///C:/dev/CGMusicalComposition/sovereign_light.mid) |
 | **Sovereign Forge**<br>*Grand heroic brass & percussion overture* | $B\flat$ Major | 112 BPM | [sovereign_forge.pdf](file:///C:/dev/CGMusicalComposition/sovereign_forge.pdf) | [sovereign_forge.wav](file:///C:/dev/CGMusicalComposition/sovereign_forge.wav) | [sovereign_forge.mid](file:///C:/dev/CGMusicalComposition/sovereign_forge.mid) |
 | **Moonlight Intro (Quartet)**<br>*Flute, Clarinet, Horn, and Cello chamber setting* | C# minor | 60 BPM | [moonlight_intro.pdf](file:///C:/dev/CGMusicalComposition/moonlight_intro.pdf) | [moonlight_intro.wav](file:///C:/dev/CGMusicalComposition/moonlight_intro.wav) | [moonlight_intro.mid](file:///C:/dev/CGMusicalComposition/moonlight_intro.mid) |
@@ -95,19 +126,18 @@ All scores maintain master note files in absolute concert pitch (`\fixed c'`) to
 1. **Flute (C)**: Single-line woodwind lead (`Notes/moonlight_samba_flute.ily`).
 2. **Oboe (C)**: Piercing mid-register lyric counter-melody (`Notes/moonlight_samba_oboe.ily`).
 3. **B♭ Clarinet I & II**: Octave doubling and montuno arpeggios (`Notes/moonlight_samba_clarinet.ily`).
-4. **E♭ Alto Saxophone**: Rich inner harmony and blues-scale riffs (`Notes/moonlight_samba_altosax.ily`).
-5. **B♭ Tenor Saxophone**: Smooth tenor counterpoint (`Notes/moonlight_samba_tenorsax.ily`).
-6. **B♭ Trumpet I & II**: Antiphonal fanfares and brass hits (`Notes/moonlight_samba_trumpet.ily`).
-7. **F French Horn**: Noble horn calls and harmonic pad (`Notes/moonlight_samba_horn.ily`).
-8. **Tenor Trombone**: Tenor brass power in concert bass clef (`Notes/moonlight_samba_trombone.ily`).
-9. **Euphonium / Baritone B.C.**: Warm melodic counter-lines (`Notes/moonlight_samba_euphonium.ily`).
-10. **BB♭ Tuba**: Foundation bass anchor (`Notes/moonlight_samba_tuba.ily`).
-11. **Electric Bass**: Slap/groove pocket reinforcement (`Notes/moonlight_samba_bass.ily`).
-12. **Glockenspiel & Orchestral Bells**: Top-register bell sparkle (`Notes/moonlight_samba_glockenspiel.ily`).
-13. **Marimba / Mallets**: 4-mallet ostinato rolls and warmth (`Notes/moonlight_samba_marimba.ily`).
-14. **Timpani**: Pitched kettle punctuation (`Notes/moonlight_samba_timpani.ily`).
-15. **Concert Battery (Snare, Bass Drum, Crash/Ride)**: Dynamic march and groove foundation (`Notes/moonlight_samba_percussion1.ily`, `Notes/moonlight_samba_percussion2.ily`).
-16. **Latin Percussion Battery (Cabasa, Timbales, Congas)**: Channel-isolated 4-voice authentic Latin groove (`Notes/moonlight_samba_latin_perc1.ily`, `Notes/moonlight_samba_latin_perc2.ily`, `Notes/moonlight_samba_latin_perc3.ily`).
+4. **Bassoon (C)**: Double-reed low register foundation and agile tenor line.
+5. **E♭ Alto Saxophone**: Rich inner harmony and blues-scale riffs (`Notes/moonlight_samba_altosax.ily`).
+6. **B♭ Tenor Saxophone**: Smooth tenor counterpoint (`Notes/moonlight_samba_tenorsax.ily`).
+7. **B♭ Trumpet I & II**: Antiphonal fanfares, Latin leads, and brass hits (`Notes/moonlight_samba_trumpet.ily`).
+8. **F French Horn**: Noble horn calls and harmonic montuno pads (`Notes/moonlight_samba_horn.ily`).
+9. **Tenor Trombone**: Tenor brass power and swaggering Latin slides (`Notes/moonlight_samba_trombone.ily`).
+10. **Euphonium / Baritone B.C.**: Warm velvety melodic counter-lines (`Notes/moonlight_samba_euphonium.ily`).
+11. **BB♭ Tuba**: Foundation bass anchor (`Notes/moonlight_samba_tuba.ily`).
+12. **Timpani**: Pitched kettle punctuation ($F_2, B\flat_2, C_3, E\flat_3$).
+13. **Tuned Percussion (Marimba & Bells)**: 4-mallet ostinatos, tremolo rolls, and crystalline bell chimes.
+14. **Concert Battery Percussion**: Dynamic snare rolls, bass drum downbeats, and crash cymbals.
+15. **Latin Percussion Battery**: Surdo heartbeat, Caixa rimshots, and cutting Cowbell syncopation.
 
 ---
 
